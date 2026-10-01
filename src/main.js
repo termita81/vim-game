@@ -98,7 +98,7 @@ function mountMission(run) {
   const workspace = mission.querySelector('.editor-shell');
   mission.querySelector('[data-field="filename"]').textContent = run.buffers[0].name;
   const mount = mission.querySelector('.editor-mount');
-  const status = mission.querySelector('.editor-status');
+  const status = document.getElementById('game-status');
   const objectives = mountObjectives(grid, run.level);
   const dialogue = mountDialogue(grid, {
     next: () =>
@@ -168,10 +168,16 @@ function render(state) {
     : 'SECURE CHANNEL';
   const missionHeading = document.getElementById('mission-heading');
   missionHeading.hidden = state.screen !== 'mission';
+  document.getElementById('mission-shortcuts').hidden = state.screen !== 'mission';
   if (state.screen === 'mission') {
     document.getElementById('mission-act').textContent = `ACT ${state.run.level.act} / ONBOARDING`;
     document.getElementById('mission-title').textContent =
       `${state.run.level.id} / ${state.run.level.title}`;
+  }
+  stage.dataset.screen = state.screen;
+  if (state.screen !== 'mission') {
+    document.getElementById('game-status').textContent =
+      state.screen === 'result' ? 'EXTRACTION COMPLETE' : 'ASSIGNMENTS';
   }
   if (state.screen === 'hub') {
     if (screen !== 'hub') cleanupMission();
@@ -180,7 +186,7 @@ function render(state) {
   } else if (state.screen === 'mission') {
     if (mountedSession !== state.run.session) mountMission(state.run);
     missionUI.hud(state.run);
-    missionUI.objectives(state.run);
+    missionUI.objectives(state.run, state.save.settings);
     missionUI.dialogue.update(state.run);
     const modified = state.run.buffers[0].text !== state.run.buffers[0].savedText;
     missionUI.status.textContent = `${state.run.mode.toUpperCase()}${modified ? ' · MODIFIED' : ''}  /  ${state.run.cursor.line}:${state.run.cursor.column + 1}`;

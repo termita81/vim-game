@@ -56,12 +56,9 @@
       </header>
       <p id="notice" class="notice" role="status" hidden></p>
       <main id="stage"><p class="loading">Opening the channel…</p></main>
-      <footer class="app-footer">
-        <span>MERIDIAN // INTERNAL USE ONLY</span
-        ><span
-          ><code>:q!</code> = abort mission <span class="footer-divider">/</span> <code>:e!</code> =
-          restart</span
-        ><span class="silent-note">NO SOUND. NO TRACE.</span>
+      <footer class="status-bar" aria-label="Game status">
+        <span id="game-status">ASSIGNMENTS</span>
+        <span id="mission-shortcuts" hidden><code>:q!</code> abort · <code>:e!</code> restart</span>
       </footer>
     </div>
     <dialog id="settings" class="settings-dialog" aria-labelledby="settings-title">
@@ -143,7 +140,6 @@
               <span data-field="filename"></span><span class="file-status">VIM / CONNECTED</span>
             </div>
             <div class="editor-mount"></div>
-            <div class="editor-status"></div>
           </section>
         </div>
       </section>
@@ -220,7 +216,6 @@
           aria-labelledby="side-tab-1"
         >
           <h2 class="section-heading">Field reference</h2>
-          <div class="motion-grid"></div>
           <dl class="controls-list"></dl>
         </section>
       </aside>
@@ -230,11 +225,8 @@
         <span class="objective-mark" aria-hidden="true">○</span>
         <p data-field="text"></p></li
     ></template>
-    <template id="motion-template"
-      ><div><kbd data-field="keys"></kbd><span data-field="description"></span></div
-    ></template>
     <template id="reference-template"
-      ><dt data-field="keys"></dt>
+      ><dt><kbd data-field="keys"></kbd></dt>
       <dd data-field="description"></dd
     ></template>
     <template id="key-overlay-template"

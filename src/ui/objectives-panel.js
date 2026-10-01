@@ -36,16 +36,21 @@ export function mountObjectives(parent, level) {
     objectiveList.insertBefore(row, extractionItem);
     return { row, mark, objective };
   });
-  const motions = controls.querySelector('.motion-grid');
   const list = controls.querySelector('.controls-list');
-  for (const [index, [keys, description]] of level.controls.entries()) {
-    const entry = cloneTemplate(index < 4 ? 'motion-template' : 'reference-template');
-    entry.querySelector('[data-field="keys"]').textContent = keys;
+  let escapeShortcut;
+  for (const [keys, description] of level.controls) {
+    const entry = cloneTemplate('reference-template');
+    const shortcut = entry.querySelector('[data-field="keys"]');
+    shortcut.textContent = keys;
+    if (keys === 'Esc / Ctrl-[') escapeShortcut = shortcut;
     entry.querySelector('[data-field="description"]').textContent = description;
-    (index < 4 ? motions : list).append(entry);
+    list.append(entry);
   }
   parent.append(panel);
-  return (run) => {
+  return (run, settings = {}) => {
+    if (escapeShortcut) {
+      escapeShortcut.textContent = settings.escAlias === 'jk' ? 'jk' : 'Esc / Ctrl-[';
+    }
     for (const { row, mark, objective } of items) {
       const complete = Boolean(run.objectives[objective.id]);
       row.classList.toggle('is-complete', complete);
