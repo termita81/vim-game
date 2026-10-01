@@ -10,7 +10,8 @@
 | Dev server | `python3 -m http.server` (or `npx serve`) | Needed because ES modules don't load from `file://` |
 | Persistence | `localStorage` | Schema in Constitution Appendix D |
 | Audio | None | By design |
-| Tests | None automated | Manual scripts per phase (Roadmap) plus dev-mode labs |
+| Tests | Node built-in `node:test` + `node:assert/strict` for pure logic | Targeted behavior/regression tests; small browser suite when needed. Owner playtests and labs remain required |
+| Lint | ESLint, flat config, recommended correctness rules | ES2022 modules, browser/Node globals by directory; development dependency only |
 
 ## 2. Dependency rules
 
@@ -19,6 +20,7 @@
 - Phase 0 uses `?external=*&target=es2022` on **every** mapped package, not only the vim module. All external imports resolve through the same map, including Lezer and `@marijn/find-cluster-break`; this prevents transitive modules from importing another copy of CodeMirror. CDN graph verification is pending owner browser playtest; see `docs/SPIKE-FINDINGS.md`.
 - If the CDN becomes a problem, vendor the files into `vendor/` and adjust the import map. No other code changes should be needed.
 - No other runtime dependencies. Helpers are hand-written.
+- Development tooling is allowed without changing browser delivery: Node `^22.13.0 || >=24`, npm, and pinned ESLint packages in `package.json` / `package-lock.json`. `npm ci` installs tooling only; the game still runs through a static server without a build or npm installation.
 
 ## 3. File layout
 
@@ -62,8 +64,17 @@ tools/
   keylab.html              prints raw key events (Ctrl-w, fullscreen lock tests)
   insult-lab.html          generates/reviews insults (Constitution App. C.5)
   (dev mode)               ?dev=1 overlay inside the game, see below
+tests/                     targeted Node tests (*.test.js), added with game logic
+  browser/                 editor integration tests, when justified
+eslint.config.js           scoped correctness rules and environment globals
+package.json               development scripts and pinned dev dependencies
+package-lock.json          reproducible development tooling install
 docs/
-  FIDELITY.md  SPIKE-FINDINGS.md  CONTENT-GUIDE.md  README.md
+  FIDELITY.md
+  SPIKE-FINDINGS.md
+  CONTENT-GUIDE.md
+  QUALITY.md
+README.md
 ```
 
 Guidelines: each file has one job. Modules communicate through `store` events and plain function calls, with no circular imports. Level files never import engine code (Constitution Appendix B).
@@ -89,3 +100,10 @@ Latest Chrome, Edge, Firefox, and Safari on desktop. iPad Safari/Chrome with a h
 
 ## 6. Conventions
 2-space indent, single quotes or double quotes consistently (pick one in Phase 1), JSDoc on exported functions, no `var`, no globals except the import map. Every exported function that changes state goes through `store`.
+
+
+## 7. Verification
+
+`npm run lint` checks JavaScript for common errors; `npm test` runs Node's built-in test runner; `npm run check` runs both. Tests import pure ES modules directly, so there is no transpiler, bundler, or DOM simulator required for game-logic tests. Keep pure logic separate from DOM/CodeMirror adapters.
+
+Use deterministic cases for scoring, objectives, rules, saves/migrations, and buffer/window state. Add browser integration coverage only where actual editor behavior matters, including mode transitions and undo/mark regressions. Select and configure a browser runner when that coverage is introduced; no browser test dependency is installed yet. Native OS-reserved shortcuts, visual quality, teaching clarity, and fun remain manual checks. See `docs/QUALITY.md`.

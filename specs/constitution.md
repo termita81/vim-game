@@ -266,7 +266,7 @@ Audio. Phone layout. Multiplayer. Accounts or servers. Teaching Neovim config fr
 | Ctrl-w: Keyboard Lock + leader alias + beforeunload | No single solution works in all browsers |
 | `<Space>` reserved as leader | Cheap now, costly to retrofit |
 | Neovim behavior over Vim | The player's goal is Neovim |
-| No automated tests | Owner decision; manual playtest scripts, plus dev-mode labs |
+| Targeted automated tests plus manual playtests | Owner revised the policy: automate deterministic logic and regression checks; retain playtests and dev-mode labs for fun, teaching, fidelity, and browser behavior |
 | Levels as data | Creativity and variety come cheap once the engine is solid |
 | Tag-based insult constraints | Allow absurdity, block the specific bad combinations |
 | No build step | Simplicity; revisit only if forced |

@@ -1,4 +1,14 @@
-**Method:** no automated tests. After each phase the owner plays through the **Playtest Script** and ticks the **Exit Criteria**. Every phase starts by running the **Smoke Test**.
+**Method:** targeted automated tests complement owner playtests. Use Node's built-in test runner for deterministic game logic; add a small browser integration suite when needed for editor regressions. After each phase the owner plays through the **Playtest Script** and ticks the **Exit Criteria**. Every phase starts by running the **Smoke Test**. Run lint and the relevant automated tests before phase signoff; passing checks never replace the owner's assessment of fun, fidelity, or physical browser shortcuts. See `docs/QUALITY.md` for scope and commands.
+
+**Automated checks by phase:**
+- Phase 0: lint the developer tools; preserve the manual browser matrix and the open insert-mode report. Add an editor regression test when the failure can be reproduced.
+- Phase 1: test objective completion and extraction gating, abort/restart state transitions, and save round-trips/corrupt data handling.
+- Phase 2: test weighted costs, replay exclusion, spam resets, rank thresholds, hints, and failure/termination boundaries.
+- Phases 3-5: test rule triggers, cooldowns, non-undoable rule edits, and register/macro regressions as those systems arrive.
+- Phases 6-8: test buffer/window state, synchronization, modified-buffer guards, undo persistence, and mapped marks. Physical Ctrl-w delivery stays manual.
+- Phases 9-10: run the accumulated checks alongside the full playtest and cross-platform matrix.
+
+No coverage percentage target. Test observable behavior and edge cases, not private implementation details or every panel.
 
 **Smoke Test (5 min, every phase):**
 1. Start the dev server and load the game. No console errors.

@@ -66,3 +66,12 @@ The generic game smoke test's hub, real level, progress, persistence, and abort/
 - [Vim module source and API](https://github.com/replit/codemirror-vim/tree/master/packages/codemirror-vim)
 - [esm.sh import maps and external dependencies](https://esm.sh/#import-maps)
 - [CodeMirror reference](https://codemirror.net/docs/ref/)
+
+## Owner playtest feedback — 2026-10-01
+
+The owner reports that the spike otherwise looks fine, with two outstanding items:
+
+- **Windows Ctrl-w check deferred:** the owner will test physical Ctrl-w on Windows later. Browser shortcut behavior remains unverified there.
+- **Possible insert-mode lock:** at one point the owner could not return to normal mode and appeared stuck in insert mode. The triggering sequence is unknown, so this is an open issue without a reliable reproduction. On recurrence, record the preceding commands, browser/OS, focused view or command input, and whether Escape or Ctrl-[ restores normal mode.
+
+This feedback does not establish completion of every checkbox or environment in the matrix above. Phase 0 signoff remains pending the outstanding checks and investigation of the mode issue.

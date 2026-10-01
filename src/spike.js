@@ -14,7 +14,6 @@ const synced = Annotation.define();
 const controllers = new Map();
 let active = 0;
 let second = null;
-let primary;
 const $ = (id) => document.getElementById(id);
 const logLines = [];
 function log(message) {
@@ -69,7 +68,7 @@ function createView(parent, state, numbers) {
   return view;
 }
 const numbers = relativeNumbers();
-primary = createView($('editor'), makeState(fixture, numbers), numbers);
+const primary = createView($('editor'), makeState(fixture, numbers), numbers);
 buffers[0].state = primary.state;
 
 function hideSecond() {
