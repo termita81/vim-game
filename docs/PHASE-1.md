@@ -10,7 +10,7 @@ The hub shows career rank **Intern** and an unlocked **0.1 — Day One**. The le
 
 The player starts on line 4, column 8 (one-based display), reaches the ◆ on line 7, column 18, and extracts with `:wq` and Enter. The document must match the original map, so editing the marker closer cannot bypass the objective. Objective changes are evaluated after editor changes/movement with a 50 ms debounce; ex commands flush the current snapshot before checking extraction.
 
-The reference route `jjjllllllllll:wq<CR>` costs **16**; par is **18** (two keys of slack). That total was checked through physical-key dispatch in Chromium. The level is a Briefing: run rank clamps at Intern, termination is disabled, and completion awards no career points. Full failure/scoring progression remains Phase 2.
+The reference route `jjjllllllllll:wq<CR>` costs **16**; par is **18** (two keys of slack). The updated route and cost are covered by the Node tests; the earlier spaced map was checked through physical-key dispatch in Chromium. The level is a Briefing: run rank clamps at Intern, termination is disabled, and completion awards no career points. Full failure/scoring progression remains Phase 2.
 
 - `:q!`: abort without completion or a penalty.
 - `:e!`: fresh document, cursor, Vim state/registers, cost, overlay, and run flags. It counts as another run attempt, not a failure.
@@ -39,7 +39,7 @@ A temporary Playwright harness exercised **Chromium 153 on Linux ARM64** against
 Observed in Chromium:
 
 - Hub → intro → navigation → extraction → outro → result → replay.
-- Reference route cost 16; objectives remain uncompleted until extraction.
+- Original spaced-map reference route cost 16; objectives remain uncompleted until extraction.
 - Disabled navigation and mouse placement leave the cursor/cost unchanged; focus remains in the editor.
 - Escape and Ctrl-[ recover normal mode from insert, visual, command, and search input.
 - Ctrl-r redo and Ctrl-v visual block work.
