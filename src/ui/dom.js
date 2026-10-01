@@ -9,6 +9,7 @@ export function element(tag, className = '', text = '') {
 /** Create a native, keyboard-accessible button. */
 export function button(text, onClick, className = '') {
   const node = element('button', className, text);
-  node.type = 'button'; node.addEventListener('click', onClick);
+  node.type = 'button';
+  node.addEventListener('click', onClick);
   return node;
 }

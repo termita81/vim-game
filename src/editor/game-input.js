@@ -2,7 +2,16 @@ import { Vim } from '@replit/codemirror-vim';
 import { inputMode } from './keys.js';
 import { keyCost, keyLabel } from '../game/keystrokes.js';
 
-const disabled = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End', 'PageUp', 'PageDown']);
+const disabled = new Set([
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowUp',
+  'ArrowDown',
+  'Home',
+  'End',
+  'PageUp',
+  'PageDown',
+]);
 
 /** Capture player input without changing Vim's normal text/command handling. */
 export function gameInput(view, cm, callbacks) {
@@ -15,19 +24,32 @@ export function gameInput(view, cm, callbacks) {
   }
   function keydown(event) {
     if (generatedEscapes.has(event)) return;
-    if (!callbacks.active()) { event.preventDefault(); event.stopPropagation(); return; }
+    if (!callbacks.active()) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
     if (disabled.has(event.key)) {
-      event.preventDefault(); event.stopPropagation(); callbacks.blocked('keys'); return;
+      event.preventDefault();
+      event.stopPropagation();
+      callbacks.blocked('keys');
+      return;
     }
     const mode = inputMode(cm, event.target);
     const label = keyLabel(event);
     if (label) callbacks.input(keyCost(event, mode), label, mode);
     const escape = event.key === 'Escape' || (event.ctrlKey && event.key === '[');
     if (escape) {
-      event.preventDefault(); event.stopPropagation();
+      event.preventDefault();
+      event.stopPropagation();
       const prompt = cm.state.dialog?.querySelector('input');
       if (prompt) {
-        const replacement = new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27, bubbles: true });
+        const replacement = new KeyboardEvent('keydown', {
+          key: 'Escape',
+          code: 'Escape',
+          keyCode: 27,
+          bubbles: true,
+        });
         generatedEscapes.add(replacement);
         prompt.dispatchEvent(replacement);
       } else {
@@ -41,14 +63,18 @@ export function gameInput(view, cm, callbacks) {
   }
   // Prevent browser defaults at bubble time, after CodeMirror's input handlers.
   function preventShortcuts(event) {
-    if (event.ctrlKey && ['o', 'r', 'u', 'd', 'f', 'v', '6', '^'].includes(event.key.toLowerCase())) event.preventDefault();
+    if (event.ctrlKey && ['o', 'r', 'u', 'd', 'f', 'v', '6', '^'].includes(event.key.toLowerCase()))
+      event.preventDefault();
   }
   function pointer(event) {
-    event.preventDefault(); event.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
     if (callbacks.active()) callbacks.blocked('mouse');
     focus();
   }
-  function prevent(event) { event.preventDefault(); }
+  function prevent(event) {
+    event.preventDefault();
+  }
   root.addEventListener('keydown', keydown, true);
   root.addEventListener('keydown', preventShortcuts);
   root.addEventListener('pointerdown', pointer, true);

@@ -5,10 +5,16 @@ import { vim, Vim, getCM } from '@replit/codemirror-vim';
 import { relativeNumbers } from './editor/relative-numbers.js';
 import { captureKeys } from './editor/keys.js';
 
-const fixture = 'alpha bravo charlie\naccess = "pending"\nzone = (internal)\n\nA paragraph for deletion.\nIt has two lines.\n\ncolumn one\ncolumn two\ncolumn three\n';
+const fixture =
+  'alpha bravo charlie\naccess = "pending"\nzone = (internal)\n\nA paragraph for deletion.\nIt has two lines.\n\ncolumn one\ncolumn two\ncolumn three\n';
 const buffers = [
   { name: 'alpha.txt', initial: fixture, state: null },
-  { name: 'beta.txt', initial: 'beta server\nUppercase marks should cross buffers.\nDifferent text, independent history.\n', state: null },
+  {
+    name: 'beta.txt',
+    initial:
+      'beta server\nUppercase marks should cross buffers.\nDifferent text, independent history.\n',
+    state: null,
+  },
 ];
 const synced = Annotation.define();
 const controllers = new Map();
@@ -20,28 +26,42 @@ function log(message) {
   logLines.unshift(`${new Date().toLocaleTimeString()} ${message}`);
   $('events').textContent = logLines.slice(0, 100).join('\n');
 }
-function say(message) { $('status').textContent = message; log(message); }
+function say(message) {
+  $('status').textContent = message;
+  log(message);
+}
 
 function makeState(text, numbers) {
-  return EditorState.create({ doc: text, extensions: [
-    vim(), history(), EditorView.darkTheme.of(true), EditorState.allowMultipleSelections.of(true), drawSelection(), highlightActiveLineGutter(), numbers.extension,
-    EditorView.updateListener.of((update) => {
-      if (update.selectionSet) {
-        // lineNumbers caches markers; explicitly reconfigure for relative cursor changes.
-        if (numbers.enabled) queueMicrotask(() => {
-          if (controllers.has(update.view)) numbers.set(update.view, true);
-        });
-      }
-      if (!update.docChanged) return;
-      if (update.transactions.some((tr) => tr.annotation(synced))) return;
-      const other = update.view === primary ? second : primary;
-      if (other) other.dispatch({
-        changes: update.changes,
-        annotations: [synced.of(true), Transaction.addToHistory.of(false)],
-      });
-      log(`Document changed in ${update.view === primary ? 'primary' : 'secondary'} view`);
-    }),
-  ] });
+  return EditorState.create({
+    doc: text,
+    extensions: [
+      vim(),
+      history(),
+      EditorView.darkTheme.of(true),
+      EditorState.allowMultipleSelections.of(true),
+      drawSelection(),
+      highlightActiveLineGutter(),
+      numbers.extension,
+      EditorView.updateListener.of((update) => {
+        if (update.selectionSet) {
+          // lineNumbers caches markers; explicitly reconfigure for relative cursor changes.
+          if (numbers.enabled)
+            queueMicrotask(() => {
+              if (controllers.has(update.view)) numbers.set(update.view, true);
+            });
+        }
+        if (!update.docChanged) return;
+        if (update.transactions.some((tr) => tr.annotation(synced))) return;
+        const other = update.view === primary ? second : primary;
+        if (other)
+          other.dispatch({
+            changes: update.changes,
+            annotations: [synced.of(true), Transaction.addToHistory.of(false)],
+          });
+        log(`Document changed in ${update.view === primary ? 'primary' : 'secondary'} view`);
+      }),
+    ],
+  });
 }
 
 Vim.defineOption('relativenumber', false, 'boolean', ['rnu'], (value, cm) => {
@@ -51,8 +71,14 @@ Vim.defineOption('relativenumber', false, 'boolean', ['rnu'], (value, cm) => {
   numbers?.set(cm.cm6, value);
 });
 Vim.defineEx('ping', 'ping', () => say('pong — custom ex command received'));
-for (const [name, prefix] of [['write', 'w'], ['quit', 'q'], ['edit', 'e']]) {
-  Vim.defineEx(name, prefix, (cm, params) => say(`Intercepted :${name}${params.argString || ''} (spike only)`));
+for (const [name, prefix] of [
+  ['write', 'w'],
+  ['quit', 'q'],
+  ['edit', 'e'],
+]) {
+  Vim.defineEx(name, prefix, (cm, params) =>
+    say(`Intercepted :${name}${params.argString || ''} (spike only)`),
+  );
 }
 Vim.defineEx('split', 'sp', () => showSecond());
 Vim.defineEx('vsplit', 'vsp', () => showSecond());
@@ -80,7 +106,11 @@ function hideSecond() {
   $('split').textContent = 'Show second view';
 }
 function showSecond() {
-  if (second) { hideSecond(); primary.focus(); return; }
+  if (second) {
+    hideSecond();
+    primary.focus();
+    return;
+  }
   const host = document.createElement('article');
   host.id = 'secondary';
   const title = document.createElement('h2');
@@ -111,7 +141,10 @@ function replay(keys) {
   }
   primary.focus();
 }
-$('replay').onclick = () => { replay('<Esc>GoProgrammatic replay landed.<Esc>'); say('Replay complete. No physical keydown events were generated.'); };
+$('replay').onclick = () => {
+  replay('<Esc>GoProgrammatic replay landed.<Esc>');
+  say('Replay complete. No physical keydown events were generated.');
+};
 $('swap').onclick = () => {
   hideSecond();
   buffers[active].state = primary.state;
@@ -128,11 +161,16 @@ $('above').onclick = () => {
   primary.dispatch({ changes: { from, insert: 'Inserted above the cursor.\n' } });
   primary.focus();
 };
-$('register').onclick = () => { say(`Register f: ${JSON.stringify(Vim.getRegisterController().getRegister('f').toString())}`); primary.focus(); };
+$('register').onclick = () => {
+  say(`Register f: ${JSON.stringify(Vim.getRegisterController().getRegister('f').toString())}`);
+  primary.focus();
+};
 $('reset').onclick = () => {
   hideSecond();
   Vim.resetVimGlobalState_();
-  buffers.forEach((buffer) => { buffer.state = null; });
+  buffers.forEach((buffer) => {
+    buffer.state = null;
+  });
   active = 0;
   primary.setState(makeState(fixture, numbers));
   observeMode(primary);
@@ -142,12 +180,21 @@ $('reset').onclick = () => {
   say('Fixtures, history, marks, and registers reset.');
   primary.focus();
 };
-$('clear').onclick = () => { logLines.length = 0; $('events').textContent = ''; };
-$('theme').onchange = (event) => { document.documentElement.dataset.theme = event.target.value; };
-captureKeys($('workspace'), (target) => {
-  const view = [...controllers.keys()].find((item) => item.dom.contains(target));
-  return view ? getCM(view) : null;
-}, log);
+$('clear').onclick = () => {
+  logLines.length = 0;
+  $('events').textContent = '';
+};
+$('theme').onchange = (event) => {
+  document.documentElement.dataset.theme = event.target.value;
+};
+captureKeys(
+  $('workspace'),
+  (target) => {
+    const view = [...controllers.keys()].find((item) => item.dom.contains(target));
+    return view ? getCM(view) : null;
+  },
+  log,
+);
 preloadRegister();
 say('Ready — Vim enabled. Register f preloaded.');
 primary.focus();

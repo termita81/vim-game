@@ -64,7 +64,6 @@ Run `python3 -m http.server 8000` and open `http://localhost:8000/` with normal 
 
 Windows Ctrl-w remains deferred to the owner's later Key Lab test, as requested. Phase 1 does not implement the window manager or claim to settle that Phase 0 risk.
 
-
 ### Height guard follow-up
 
 The owner reported that 922×412 was unusable. The larger-screen guard now checks height as well as width: either width below 768 or height below 600 displays the message. This is a provisional minimum for the compact layout, not a claim that 768×600 is optimal; 1280×720 or larger remains recommended. Further compression can be assessed during polish without exposing a cramped editor now.

@@ -6,15 +6,18 @@ export function relativeNumbers() {
   const compartment = new Compartment();
   let enabled = false;
   let visible = true;
-  const gutter = () => (visible || enabled) ? lineNumbers({
-    formatNumber(number, state) {
-      if (!enabled) return String(number);
-      const current = state.doc.lineAt(state.selection.main.head).number;
-      return String(number === current ? (visible ? number : 0) : Math.abs(number - current));
-    },
-    // Cursor movement must redraw the gutter, even when the document is unchanged.
-    domEventHandlers: {},
-  }) : [];
+  const gutter = () =>
+    visible || enabled
+      ? lineNumbers({
+          formatNumber(number, state) {
+            if (!enabled) return String(number);
+            const current = state.doc.lineAt(state.selection.main.head).number;
+            return String(number === current ? (visible ? number : 0) : Math.abs(number - current));
+          },
+          // Cursor movement must redraw the gutter, even when the document is unchanged.
+          domEventHandlers: {},
+        })
+      : [];
   return {
     extension: compartment.of(gutter()),
     set(view, value) {
@@ -25,6 +28,8 @@ export function relativeNumbers() {
       visible = value;
       view.dispatch({ effects: compartment.reconfigure(gutter()) });
     },
-    get enabled() { return enabled; },
+    get enabled() {
+      return enabled;
+    },
   };
 }

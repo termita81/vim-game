@@ -12,6 +12,8 @@ Use Node `^22.13.0 || >=24` and npm:
 
 ```sh
 npm ci
+npm run format
+npm run format:check
 npm run lint
 npm test
 npm run check
@@ -45,7 +47,7 @@ Tooling versions are pinned in `package.json` and its lockfile: ESLint 10.11.0, 
 
 The current setup lints JavaScript only. It does not validate HTML, CSS, import-map resolution, browser compatibility, or third-party Vim APIs. Recommended lint rules will not catch a misspelled property on an untyped editor object. Keep the editor playtests and dependency checks.
 
-Formatting remains the repository's existing conventions; no formatter or stylistic plugin is added. HTML/CSS linters can be considered if defects there become frequent, but adding them now would mostly increase configuration. No import-resolution plugin is needed: browser import maps resolve CDN package names independently of local npm installs.
+Prettier 3.9.9 is pinned as a development dependency and runs separately from ESLint. `.prettierrc.json` sets two-space indentation, single quotes, semicolons, trailing commas, and a 100-character target width. `npm run format` formats supported project files, including JavaScript, HTML, CSS, JSON, and Markdown; `npm run format:check` checks without writing. `npm run check` requires formatting, lint, and tests to pass. `.prettierignore` excludes dependencies, vendored/generated files, the npm-managed lockfile, and brainstorming archives. Keep meaningful names and clear function structure: a formatter only enforces layout. HTML/CSS linters can be considered if defects there become frequent, but adding them now would mostly increase configuration. No import-resolution plugin is needed: browser import maps resolve CDN package names independently of local npm installs.
 
 Vendored dependencies, generated output, and coverage are excluded. Tool source is checked so the diagnostic pages remain maintainable. Do not suppress genuine errors merely to get a clean run.
 

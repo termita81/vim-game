@@ -1,44 +1,104 @@
 <!doctype html>
 <html lang="en" data-theme="green">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ghost Protocol · Phase 0</title><link rel="stylesheet" href="../css/spike.css">
-<script type="importmap">{
-  "imports": {
-    "@codemirror/state": "https://esm.sh/@codemirror/state@6.7.6?external=*&target=es2022",
-    "@codemirror/view": "https://esm.sh/@codemirror/view@6.43.13?external=*&target=es2022",
-    "@codemirror/commands": "https://esm.sh/@codemirror/commands@6.11.1?external=*&target=es2022",
-    "@codemirror/language": "https://esm.sh/@codemirror/language@6.12.4?external=*&target=es2022",
-    "@codemirror/search": "https://esm.sh/@codemirror/search@6.7.2?external=*&target=es2022",
-    "@replit/codemirror-vim": "https://esm.sh/@replit/codemirror-vim@6.4.0?external=*&target=es2022",
-    "@replit/codemirror-vim-core": "https://esm.sh/@replit/codemirror-vim-core@0.1.0?external=*&target=es2022",
-    "@lezer/common": "https://esm.sh/@lezer/common@1.5.3?external=*&target=es2022",
-    "@lezer/highlight": "https://esm.sh/@lezer/highlight@1.2.5?external=*&target=es2022",
-    "@lezer/lr": "https://esm.sh/@lezer/lr@1.4.10?external=*&target=es2022",
-    "style-mod": "https://esm.sh/style-mod@4.1.4?external=*&target=es2022",
-    "w3c-keyname": "https://esm.sh/w3c-keyname@2.2.8?external=*&target=es2022",
-    "crelt": "https://esm.sh/crelt@1.0.7?external=*&target=es2022",
-    "@marijn/find-cluster-break": "https://esm.sh/@marijn/find-cluster-break@1.0.4?external=*&target=es2022"
-  }
-}</script></head>
-<body><main>
-<header><p class="eyebrow">GHOST PROTOCOL / ENGINE SPIKE</p><h1>Prove the foundations.</h1>
-<p>A Vim sandbox for Phase 0. This page is a technical prototype.</p><a href="keylab.html">Open Key Lab →</a></header>
-<section class="toolbar" aria-label="Spike controls">
-<button id="reset">Reset fixtures</button><button id="replay">Replay demo</button>
-<button id="swap">Swap buffer</button><button id="split">Show second view</button>
-<button id="above">Insert line above cursor</button><button id="register">Inspect register f</button>
-<label>Theme <select id="theme"><option value="green">Green</option><option value="amber">Amber</option><option value="grey">Grey</option></select></label>
-</section>
-<p id="status" role="status">Loading pinned editor modules…</p>
-<section id="workspace" aria-label="Editor views"><article><h2 id="buffer-label">alpha.txt</h2><div id="editor"></div></article></section>
-<section class="notes"><h2>Manual probes</h2>
-<ul><li>Try <code>hjkl</code>, <code>ciw</code>, <code>ci"</code>, <code>dap</code>, <code>Ctrl-v</code> then <code>I</code>, <code>qa…q@a</code>, <code>.</code>, and <code>:%s/a/b/g</code>.</li>
-<li><code>:ping</code> reports a message. Replay demo inserts a sentence using <code>Vim.handleKey</code>.</li>
-<li><code>"fp</code> pastes the dead drop. Try native <code>:reg f</code>; the inspect button reads the same register without replacing that command.</li>
-<li>Set <code>ma</code>, move to an earlier line, insert above, then <code>'a</code>. Swap away and back, then repeat. Test <code>mA</code> in alpha and <code>'A</code> in beta.</li>
-<li><code>:set rnu</code> / <code>:set nornu</code> toggle the custom gutter. The full <code>relativenumber</code> spelling also works.</li>
-<li>Show a second view, edit either, then try <code>u</code> in each. Hide it before swapping buffers.</li>
-<li><code>:sp</code> / <code>:vsp</code> show a second view; <code>:q</code>, <code>:q!</code>, <code>:e</code>, <code>:e!</code>, <code>:w</code> report interception only. No game flow exists yet.</li></ul>
-<p>Editor captures Vim shortcuts; arrows and mouse are available for inspecting the prototype. Physical Ctrl-w checks belong in Key Lab.</p></section>
-<section><h2>Capture log <button id="clear">Clear</button></h2><pre id="events" aria-live="off"></pre></section>
-</main><script type="module" src="../src/bootstrap.js"></script></body></html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ghost Protocol · Phase 0</title>
+    <link rel="stylesheet" href="../css/spike.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "@codemirror/state": "https://esm.sh/@codemirror/state@6.7.6?external=*&target=es2022",
+          "@codemirror/view": "https://esm.sh/@codemirror/view@6.43.13?external=*&target=es2022",
+          "@codemirror/commands": "https://esm.sh/@codemirror/commands@6.11.1?external=*&target=es2022",
+          "@codemirror/language": "https://esm.sh/@codemirror/language@6.12.4?external=*&target=es2022",
+          "@codemirror/search": "https://esm.sh/@codemirror/search@6.7.2?external=*&target=es2022",
+          "@replit/codemirror-vim": "https://esm.sh/@replit/codemirror-vim@6.4.0?external=*&target=es2022",
+          "@replit/codemirror-vim-core": "https://esm.sh/@replit/codemirror-vim-core@0.1.0?external=*&target=es2022",
+          "@lezer/common": "https://esm.sh/@lezer/common@1.5.3?external=*&target=es2022",
+          "@lezer/highlight": "https://esm.sh/@lezer/highlight@1.2.5?external=*&target=es2022",
+          "@lezer/lr": "https://esm.sh/@lezer/lr@1.4.10?external=*&target=es2022",
+          "style-mod": "https://esm.sh/style-mod@4.1.4?external=*&target=es2022",
+          "w3c-keyname": "https://esm.sh/w3c-keyname@2.2.8?external=*&target=es2022",
+          "crelt": "https://esm.sh/crelt@1.0.7?external=*&target=es2022",
+          "@marijn/find-cluster-break": "https://esm.sh/@marijn/find-cluster-break@1.0.4?external=*&target=es2022"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="eyebrow">GHOST PROTOCOL / ENGINE SPIKE</p>
+        <h1>Prove the foundations.</h1>
+        <p>A Vim sandbox for Phase 0. This page is a technical prototype.</p>
+        <a href="keylab.html">Open Key Lab →</a>
+      </header>
+      <section class="toolbar" aria-label="Spike controls">
+        <button id="reset">Reset fixtures</button><button id="replay">Replay demo</button>
+        <button id="swap">Swap buffer</button><button id="split">Show second view</button>
+        <button id="above">Insert line above cursor</button
+        ><button id="register">Inspect register f</button>
+        <label
+          >Theme
+          <select id="theme">
+            <option value="green">Green</option>
+            <option value="amber">Amber</option>
+            <option value="grey">Grey</option>
+          </select></label
+        >
+      </section>
+      <p id="status" role="status">Loading pinned editor modules…</p>
+      <section id="workspace" aria-label="Editor views">
+        <article>
+          <h2 id="buffer-label">alpha.txt</h2>
+          <div id="editor"></div>
+        </article>
+      </section>
+      <section class="notes">
+        <h2>Manual probes</h2>
+        <ul>
+          <li>
+            Try <code>hjkl</code>, <code>ciw</code>, <code>ci"</code>, <code>dap</code>,
+            <code>Ctrl-v</code> then <code>I</code>, <code>qa…q@a</code>, <code>.</code>, and
+            <code>:%s/a/b/g</code>.
+          </li>
+          <li>
+            <code>:ping</code> reports a message. Replay demo inserts a sentence using
+            <code>Vim.handleKey</code>.
+          </li>
+          <li>
+            <code>"fp</code> pastes the dead drop. Try native <code>:reg f</code>; the inspect
+            button reads the same register without replacing that command.
+          </li>
+          <li>
+            Set <code>ma</code>, move to an earlier line, insert above, then <code>'a</code>. Swap
+            away and back, then repeat. Test <code>mA</code> in alpha and <code>'A</code> in beta.
+          </li>
+          <li>
+            <code>:set rnu</code> / <code>:set nornu</code> toggle the custom gutter. The full
+            <code>relativenumber</code> spelling also works.
+          </li>
+          <li>
+            Show a second view, edit either, then try <code>u</code> in each. Hide it before
+            swapping buffers.
+          </li>
+          <li>
+            <code>:sp</code> / <code>:vsp</code> show a second view; <code>:q</code>,
+            <code>:q!</code>, <code>:e</code>, <code>:e!</code>, <code>:w</code> report interception
+            only. No game flow exists yet.
+          </li>
+        </ul>
+        <p>
+          Editor captures Vim shortcuts; arrows and mouse are available for inspecting the
+          prototype. Physical Ctrl-w checks belong in Key Lab.
+        </p>
+      </section>
+      <section>
+        <h2>Capture log <button id="clear">Clear</button></h2>
+        <pre id="events" aria-live="off"></pre>
+      </section>
+    </main>
+    <script type="module" src="../src/bootstrap.js"></script>
+  </body>
+</html>

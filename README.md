@@ -23,6 +23,6 @@ npm ci
 npm run check
 ```
 
-This runs ESLint and targeted Node tests. Tests cover core flow, objectives, cost, persistence, and shortcut handling order. No bundler or transpiler is used.
+This checks Prettier formatting, runs ESLint, and runs targeted Node tests. Use `npm run format` to apply formatting. Tests cover core flow, objectives, cost, persistence, and shortcut handling order. No bundler or transpiler is used.
 
 See [Phase 1 verification and owner playtest](docs/PHASE-1.md), [quality policy](docs/QUALITY.md), [spike findings](docs/SPIKE-FINDINGS.md), [fidelity notes](docs/FIDELITY.md), and [the roadmap](specs/roadmap.md).

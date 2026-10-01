@@ -16,12 +16,18 @@ export function captureKeys(root, getEditor, log) {
     if (!cm) return;
     const mode = inputMode(cm, event.target);
     const cost = keyCost(event, mode);
-    log(`${mode.padEnd(13)} ${event.ctrlKey ? 'Ctrl-' : ''}${event.altKey ? 'Alt-' : ''}${event.metaKey ? 'Meta-' : ''}${event.key} → ${cost}`);
+    log(
+      `${mode.padEnd(13)} ${event.ctrlKey ? 'Ctrl-' : ''}${event.altKey ? 'Alt-' : ''}${event.metaKey ? 'Meta-' : ''}${event.key} → ${cost}`,
+    );
   };
   // CodeMirror skips its handlers when defaultPrevented is already true.
   // Count before Vim, but cancel browser defaults only after Vim has run.
   const preventShortcuts = (event) => {
-    if (getEditor(event.target) && event.ctrlKey && ['o', 'r', 'u', 'd', 'f', '[', 'v', '6', '^'].includes(event.key.toLowerCase())) {
+    if (
+      getEditor(event.target) &&
+      event.ctrlKey &&
+      ['o', 'r', 'u', 'd', 'f', '[', 'v', '6', '^'].includes(event.key.toLowerCase())
+    ) {
       event.preventDefault();
     }
   };

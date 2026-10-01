@@ -5,10 +5,15 @@ import { element } from './dom.js';
 export function mountHud(parent) {
   const hud = element('div', 'hud');
   const fields = {};
-  for (const [id, label] of [['cost', 'KEY COST'], ['rank', 'RUN RANK'], ['mode', 'VIM MODE']]) {
+  for (const [id, label] of [
+    ['cost', 'KEY COST'],
+    ['rank', 'RUN RANK'],
+    ['mode', 'VIM MODE'],
+  ]) {
     const cell = element('div', 'hud-cell');
     fields[id] = element('strong');
-    cell.append(element('span', 'label', label), fields[id]); hud.append(cell);
+    cell.append(element('span', 'label', label), fields[id]);
+    hud.append(cell);
   }
   hud.append(element('span', 'briefing-badge', 'UNSCORED BRIEFING'));
   parent.append(hud);

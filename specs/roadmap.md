@@ -1,6 +1,7 @@
 **Method:** targeted automated tests complement owner playtests. Use Node's built-in test runner for deterministic game logic; add a small browser integration suite when needed for editor regressions. After each phase the owner plays through the **Playtest Script** and ticks the **Exit Criteria**. Every phase starts by running the **Smoke Test**. Run lint and the relevant automated tests before phase signoff; passing checks never replace the owner's assessment of fun, fidelity, or physical browser shortcuts. See `docs/QUALITY.md` for scope and commands.
 
 **Automated checks by phase:**
+
 - Phase 0: lint the developer tools; preserve the manual browser matrix and the open insert-mode report. Add an editor regression test when the failure can be reproduced.
 - Phase 1: test objective completion and extraction gating, abort/restart state transitions, and save round-trips/corrupt data handling.
 - Phase 2: test weighted costs, replay exclusion, spam resets, rank thresholds, hints, and failure/termination boundaries.
@@ -11,6 +12,7 @@
 No coverage percentage target. Test observable behavior and edge cases, not private implementation details or every panel.
 
 **Smoke Test (5 min, every phase):**
+
 1. Start the dev server and load the game. No console errors.
 2. Play the earliest level available. Move, edit, finish.
 3. Switch all three themes. Nothing illegible.
@@ -19,12 +21,12 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 
 **Cross-platform matrix (run at Phases 0, 6, and 10):**
 
-| Environment | Check |
-|---|---|
-| macOS Chrome/Safari/Firefox | Everything works, `Ctrl-w` native |
-| Windows or Linux Chrome/Edge | Fullscreen + Keyboard Lock makes `Ctrl-w` work |
-| Windows or Linux Firefox | Leader alias works, `beforeunload` prompt appears |
-| Screens: 1280×720, 1920×1080, 2560×1440, 1024×768 and 820×1180 (tablet sizes via devtools or a real tablet) | Layout usable, no clipped editor |
+| Environment                                                                                                 | Check                                             |
+| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| macOS Chrome/Safari/Firefox                                                                                 | Everything works, `Ctrl-w` native                 |
+| Windows or Linux Chrome/Edge                                                                                | Fullscreen + Keyboard Lock makes `Ctrl-w` work    |
+| Windows or Linux Firefox                                                                                    | Leader alias works, `beforeunload` prompt appears |
+| Screens: 1280×720, 1920×1080, 2560×1440, 1024×768 and 820×1180 (tablet sizes via devtools or a real tablet) | Layout usable, no clipped editor                  |
 
 ---
 
@@ -35,6 +37,7 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 **Deliverables:** a minimal page with a vim-enabled editor; `tools/keylab.html`; `docs/SPIKE-FINDINGS.md`; a pinned import map.
 
 **Tasks**
+
 1. Load CodeMirror 6 and the vim module from esm.sh with a single copy of each `@codemirror/*` package.
 2. Register a custom ex command (`:ping`) that shows a message.
 3. Drive keys programmatically with `Vim.handleKey`.
@@ -47,6 +50,7 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 10. Check that `:sp`-style custom commands, `:q`, `:e`, and `:w` can be overridden by our own.
 
 **Playtest script**
+
 1. Load the spike page. Try `hjkl`, `ciw`, `ci\"`, `dap`, `Ctrl-v` + `I`, `qa…q@a`, `.`, `:%s/a/b/g`. Note anything broken.
 2. Run `:ping`. Expect the message.
 3. Trigger the programmatic replay button. Expect the text to appear.
@@ -69,6 +73,7 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 **Tasks:** layout grid and themes; responsive breakpoints; level loader and runner; objective evaluation; cost counting (Constitution 5.1); disabled arrows/mouse and the handler's first reaction; key overlay with fade; `:q!` and `:e!`; `localStorage` save; footer shows `:q! = abort mission`.
 
 **Playtest script**
+
 1. Hub shows career rank **Intern** and Level 0.1 unlocked.
 2. Start 0.1. The handler explains `:wq` and `:q!`. Move to the ◆ with `hjkl`.
 3. Press an arrow key. Expect it ignored plus a handler quip. Click in the editor. Expect focus retained.
@@ -88,6 +93,7 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 **Deliverables:** scoring module, run rank, failure events, termination and restart flow, career rank, hint system, the insult composer (pools, templates, contexts, constraints, history), `tools/insult-lab.html`, dev mode (`?dev=1`), Level Lab (run `solution`, compute par), Levels **0.2 and 0.3** (with `:wq` extraction).
 
 **Playtest script**
+
 1. Play 0.2 and 0.3. Extraction happens only after `:wq`.
 2. In a Drill-type test level (dev mode can force one), waste keystrokes. Watch the run rank decay Ghost → Shadow → Contractor → Intern → Cautionary Tale. At the last step, expect termination with an insult, a typed `:e!`, and a restart.
 3. Verify typing in insert mode costs 0.5, a macro replay costs 0, `5j` resets the spam streak, and `jjjjjjjj` adds penalties.
@@ -108,6 +114,7 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 **Deliverables:** Levels **1.1-1.5, 2.1-2.5, A1**. Relative numbers (Level 1.2). Search highlighting and `:noh`. The **Watchdog** rule (first rule type, minimal rules engine core). Toolkit panel with mastery fade.
 
 **Playtest script**
+
 1. Play 1.1-1.5 in order. Note confusing instructions or unfair par.
 2. In 1.2 the handler asks for `:set relativenumber`. Type it. Numbers switch. `5j` works using the relative numbers.
 3. In 1.5 search `/`, `n`, `N`, `*`, `:noh`.
@@ -128,6 +135,7 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 **Deliverables:** full rules engine (`every`/`change`/`tick`/`after`/`event`/`mode` triggers, `s` context, non-undoable rule edits), trace meter, timers and time-based scoring, tripwires, the Sysadmin NPC pattern, phases, respawn. Levels **3.1-3.4, 4.1-4.4, A2**.
 
 **Playtest script**
+
 1. 3.4: silence bots. Let them wake by waiting. Check that the failure event rank-drops once, not repeatedly (cooldown). Note that the wake-up edit can't be undone with `u`.
 2. Confirm rule edits don't count as keystrokes and don't corrupt undo history.
 3. 4.4: the Sysadmin inserts lines while you work. The cursor and marks should stay with their text.
@@ -145,6 +153,7 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 **Deliverables:** register preloading, `:reg`, macro-in-register levels, append-to-register support. Levels **5.1-5.5**.
 
 **Playtest script**
+
 1. Record and replay macros with counts. A failing motion aborts the macro.
 2. Handler's register `f`: `:reg f` shows it, `\"fp` pastes it.
 3. `\"Ayy` appends. `:reg a` shows the accumulated text.
@@ -160,6 +169,7 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 **Deliverables:** layout tree, the full Constitution 10.2 command set, per-window status lines, Keyboard Lock and alias handling, `beforeunload` guard, layout objective checks. Levels **6.1-6.4**.
 
 **Playtest script**
+
 1. `:sp`, `:vsp`, `Ctrl-w s/v/n`. Verify placement (new window above/left, focused).
 2. Navigate with `Ctrl-w hjkl wWptb`.
 3. Resize with `Ctrl-w + - < >` (with counts), `=`, `_`, `|`, `:resize`, `:vertical resize`.
@@ -178,6 +188,7 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 **Deliverables:** buffer list, hidden buffers, `:ls` flags, `:b`, `:bn`, `:bp`, `:e`, `:e #`, `Ctrl-^`/`Ctrl-6`, `:bd`, `:w`, `:wa`, `:wqa`, `:qa`, E37/E162 errors, cross-buffer rules. Levels **7.1-7.3**.
 
 **Playtest script**
+
 1. `:ls` output matches Neovim's format (flags `%`, `#`, `+`, `h`).
 2. Hop between buffers. Edits persist in hidden buffers, and undo history persists per buffer.
 3. `:q` with a modified hidden buffer gives E162 naming the buffer.
@@ -194,6 +205,7 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 **Deliverables:** marks that follow text, global marks across buffers, `:marks`, `:jumps`, `Ctrl-o`/`Ctrl-i`, `''`. Levels **8.1-8.3**.
 
 **Playtest script**
+
 1. `ma`, `'a`, `` `a ``: line versus exact position.
 2. Sysadmin inserts lines above: marks follow.
 3. `mA` in one buffer, `'A` from another buffer jumps across buffers.
@@ -210,6 +222,7 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 **Deliverables:** Levels **F.1 and F.2**. The multi-phase boss, the handler's last instructions in registers `a`-`e`, and the ending sequence.
 
 **Playtest script**
+
 1. F.1: gauntlet requires skills from every act.
 2. F.2: play through all phases: windows, buffers, marks, macros, registers. Read registers `a`-`e` in order.
 3. Finish with `:wqa`. Watch the ending. Confirm the tone lands (dry, dark, a little warm).
@@ -224,6 +237,7 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 **Tasks:** responsive and theme pass on every level; content edit for tone and typos; expand insult pools to the Appendix C targets and review them in the Insult Lab; accessibility pass (`prefers-reduced-motion`, contrast); README (how to run, how to add a level, how to add a pack); `FIDELITY.md` and `CONTENT-GUIDE.md` finalized; optional vendoring of CDN files.
 
 **Playtest script**
+
 1. Run the Cross-platform matrix completely.
 2. Fresh-profile playthrough of Acts 0-2 by someone who knows only basic Vim (ideally not the author). Watch where they get stuck, and don't help.
 3. Read all handler dialogue aloud once for tone.
@@ -235,13 +249,12 @@ No coverage percentage target. Test observable behavior and edge cases, not priv
 
 ## Risk Register
 
-| Risk | Mitigation |
-|---|---|
-| Vim module lacks a command we want to teach | Phase 0 finds it. Implement ourselves (`compat.js`), or cut it from the curriculum |
-| `Ctrl-w` can't be captured in some browsers | Leader alias and `beforeunload` guard (Constitution 7.3) |
-| Marks don't survive buffer swaps | Own `marks.js` |
-| Shared undo across windows is hard | Accept per-window history, keep levels from depending on it |
-| Insult pool reads as repetitive or off-tone | Insult Lab review, tags/constraints, recency history, pool growth in Phase 10 |
-| CDN outage or version drift | Pinned versions, option to vendor |
-| Levels too hard or too easy | Par derived from reference solutions, generous 4× termination, mercy rule, owner playtest at every phase |
-
+| Risk                                        | Mitigation                                                                                               |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Vim module lacks a command we want to teach | Phase 0 finds it. Implement ourselves (`compat.js`), or cut it from the curriculum                       |
+| `Ctrl-w` can't be captured in some browsers | Leader alias and `beforeunload` guard (Constitution 7.3)                                                 |
+| Marks don't survive buffer swaps            | Own `marks.js`                                                                                           |
+| Shared undo across windows is hard          | Accept per-window history, keep levels from depending on it                                              |
+| Insult pool reads as repetitive or off-tone | Insult Lab review, tags/constraints, recency history, pool growth in Phase 10                            |
+| CDN outage or version drift                 | Pinned versions, option to vendor                                                                        |
+| Levels too hard or too easy                 | Par derived from reference solutions, generous 4× termination, mercy rule, owner playtest at every phase |
