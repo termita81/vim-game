@@ -6,7 +6,7 @@
 | Markup/styles | One `index.html`, a few CSS files | CSS custom properties for themes, CSS Grid/Flexbox for layout |
 | Editor | **CodeMirror 6** (`@codemirror/state`, `view`, `commands`, `language`, `search`) | One `EditorView` per window |
 | Vim emulation | **`@replit/codemirror-vim`** | Provides motions, operators, text objects, registers, marks, macros, `:s`, `:g`, `Vim.handleKey`, `Vim.defineEx` |
-| Delivery | CDN via **esm.sh**, with a pinned **import map** | Exact versions are chosen in Phase 0 and recorded in `index.html` |
+| Delivery | CDN via **esm.sh**, with a pinned **import map** | Phase 0 versions are recorded in `tools/spike.html`; the game import map belongs in `index.html` from Phase 1 |
 | Dev server | `python3 -m http.server` (or `npx serve`) | Needed because ES modules don't load from `file://` |
 | Persistence | `localStorage` | Schema in Constitution Appendix D |
 | Audio | None | By design |
@@ -15,7 +15,7 @@
 ## 2. Dependency rules
 
 - **One copy of each `@codemirror/*` package.** Use an import map, and load the vim module with all `@codemirror/*` packages marked external (esm.sh `?external=...`), otherwise CodeMirror throws \"multiple instances of @codemirror/state\". Verify in Phase 0.
-- Pin exact versions. No `@latest`. Phase 0 pins: `@replit/codemirror-vim` 6.4.0 and core 0.1.0; CodeMirror state 6.7.6, view 6.43.13, commands 6.11.1, language 6.12.4, search 6.7.2. The complete transitive map lives in `index.html`.
+- Pin exact versions. No `@latest`. Phase 0 pins: `@replit/codemirror-vim` 6.4.0 and core 0.1.0; CodeMirror state 6.7.6, view 6.43.13, commands 6.11.1, language 6.12.4, search 6.7.2. The complete Phase 0 transitive map lives in `tools/spike.html`.
 - Phase 0 uses `?external=*&target=es2022` on **every** mapped package, not only the vim module. All external imports resolve through the same map, including Lezer and `@marijn/find-cluster-break`; this prevents transitive modules from importing another copy of CodeMirror. CDN graph verification is pending owner browser playtest; see `docs/SPIKE-FINDINGS.md`.
 - If the CDN becomes a problem, vendor the files into `vendor/` and adjust the import map. No other code changes should be needed.
 - No other runtime dependencies. Helpers are hand-written.
@@ -58,6 +58,7 @@ src/
     hud.js  dialogue.js  objectives-panel.js  toolkit-panel.js
     key-overlay.js  hub.js  settings.js  result-screen.js  layout.js
 tools/
+  spike.html               Phase 0 editor sandbox, retained for developer diagnostics
   keylab.html              prints raw key events (Ctrl-w, fullscreen lock tests)
   insult-lab.html          generates/reviews insults (Constitution App. C.5)
   (dev mode)               ?dev=1 overlay inside the game, see below

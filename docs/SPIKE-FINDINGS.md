@@ -10,7 +10,7 @@ From the repository root:
 python3 -m http.server 8000
 ```
 
-Open `http://localhost:8000/` and `http://localhost:8000/tools/keylab.html`. Internet access to esm.sh is required. Key Lab has no CDN dependencies. No build, npm installation, or automated test suite is required.
+Open `http://localhost:8000/tools/spike.html` and `http://localhost:8000/tools/keylab.html`. Internet access to esm.sh is required. Key Lab has no CDN dependencies. No build, npm installation, or automated test suite is required.
 
 ## Evidence and limits
 

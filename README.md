@@ -8,7 +8,7 @@ Run from this directory:
 python3 -m http.server 8000
 ```
 
-Open [the spike](http://localhost:8000/) or [Key Lab](http://localhost:8000/tools/keylab.html). The editor loads pinned ES modules from esm.sh and needs internet access; there is no build step. Use a desktop browser and keyboard.
+Open [the spike](http://localhost:8000/tools/spike.html) or [Key Lab](http://localhost:8000/tools/keylab.html). The editor loads pinned ES modules from esm.sh and needs internet access; there is no build step. Use a desktop browser and keyboard.
 
 The spike includes Vim editing, programmatic replay, a preloaded register, relative numbers, buffer-swap and synchronized-view experiments, custom ex commands, and a mode/input log. Quit/edit/write commands report interception only; there is no playable level yet.
 
