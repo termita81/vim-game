@@ -26,12 +26,14 @@ export function mountObjectives(parent, level) {
     });
   }
   select(0);
-  const extraction = objectives.querySelector('.extraction-note');
+  const objectiveList = objectives.querySelector('.objectives-list');
+  const extractionItem = objectiveList.querySelector('.extraction-item');
+  const extraction = extractionItem.querySelector('.extraction-note');
   const items = level.objectives.map((objective) => {
     const row = cloneTemplate('objective-template').firstElementChild;
     const mark = row.querySelector('.objective-mark');
     row.querySelector('[data-field="text"]').textContent = objective.text;
-    objectives.insertBefore(row, extraction);
+    objectiveList.insertBefore(row, extractionItem);
     return { row, mark, objective };
   });
   const motions = controls.querySelector('.motion-grid');
@@ -51,8 +53,8 @@ export function mountObjectives(parent, level) {
       row.setAttribute('aria-label', `${complete ? 'Complete' : 'Incomplete'}: ${objective.text}`);
     }
     extraction.textContent = run.ready
-      ? '◆ Extraction ready — :wq ↵'
+      ? 'Extraction ready — :wq ↵'
       : 'Reach the terminal, then :wq ↵ to extract.';
-    extraction.classList.toggle('is-ready', run.ready);
+    extractionItem.classList.toggle('is-ready', run.ready);
   };
 }

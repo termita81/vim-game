@@ -202,10 +202,16 @@
           aria-labelledby="side-tab-0"
         >
           <h2 class="section-heading">Mission objectives</h2>
-          <p class="extraction-note">Reach the terminal, then :wq ↵ to extract.</p>
-          <p class="muted objective-help">
-            Keep the map intact. If you accidentally edit it, :e! restores a fresh copy.
-          </p>
+          <ul class="objectives-list">
+            <li class="objective-item extraction-item">
+              <span class="objective-mark" aria-hidden="true">○</span>
+              <p class="extraction-note">Reach the terminal, then :wq ↵ to extract.</p>
+            </li>
+            <li class="objective-item objective-help">
+              <span class="objective-mark" aria-hidden="true">○</span>
+              <p>Keep the map intact. If you accidentally edit it, :e! restores a fresh copy.</p>
+            </li>
+          </ul>
         </section>
         <section
           class="controls-section"
@@ -220,9 +226,9 @@
       </aside>
     </template>
     <template id="objective-template"
-      ><div class="objective">
+      ><li class="objective objective-item">
         <span class="objective-mark" aria-hidden="true">○</span>
-        <p data-field="text"></p></div
+        <p data-field="text"></p></li
     ></template>
     <template id="motion-template"
       ><div><kbd data-field="keys"></kbd><span data-field="description"></span></div
