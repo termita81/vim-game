@@ -4,7 +4,7 @@
 
 On 2026-10-01 the owner approved replacing the no-automated-tests policy with targeted automated tests plus manual playtests. The roadmap, tech stack, and constitution decision log reflect that decision.
 
-Automate deterministic behavior and important regressions. Keep manual playtests for fun, teaching clarity, visuals, Vim/Neovim fidelity, and physical browser shortcuts. Automated checks cannot establish Windows Ctrl-w delivery. The owner's report of getting stuck in insert mode remains open in `SPIKE-FINDINGS.md`; this tooling change does not fix it.
+Automate deterministic behavior and important regressions. Keep manual playtests for fun, teaching clarity, visuals, Vim/Neovim fidelity, and physical browser shortcuts. Automated checks cannot establish Windows Ctrl-w delivery. The owner's insert-mode report was investigated during Phase 1: a Ctrl-[ capture-order bug was reproduced and fixed; original-sequence/owner confirmation remains pending in `SPIKE-FINDINGS.md`.
 
 ## Commands
 
@@ -31,7 +31,7 @@ Prioritize:
 - Save round-trips, migrations, corrupt data, and unknown versions.
 - Buffer/window state, modified-buffer guards, synchronization, and undo/mark regressions.
 
-Add tests as those systems are implemented; do not invent an engine just to populate a suite. **There are currently no committed automated tests.** A successful `npm test` with zero tests only confirms the command runs, not that game behavior is verified.
+Add tests as those systems are implemented; do not invent an engine just to populate a suite. **Phase 1 now includes 22 Node tests** for core flow, objectives, cost, persistence, and input-capture ordering. See `PHASE-1.md` for coverage and browser verification. A successful command with zero tests must never be presented as verification of game behavior.
 
 A small browser integration suite is appropriate later for mode transitions, synchronization, undo, and marks. Choose its runner when needed; no browser test package is installed now. Do not treat a mocked DOM or synthetic shortcut as proof of real browser/OS behavior.
 

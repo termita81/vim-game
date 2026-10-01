@@ -75,3 +75,11 @@ The owner reports that the spike otherwise looks fine, with two outstanding item
 - **Possible insert-mode lock:** at one point the owner could not return to normal mode and appeared stuck in insert mode. The triggering sequence is unknown, so this is an open issue without a reliable reproduction. On recurrence, record the preceding commands, browser/OS, focused view or command input, and whether Escape or Ctrl-[ restores normal mode.
 
 This feedback does not establish completion of every checkbox or environment in the matrix above. Phase 0 signoff remains pending the outstanding checks and investigation of the mode issue.
+
+### Insert-mode investigation during Phase 1
+
+A reproducible case was found in Chromium 153: enter insert mode in the spike, type text, then press **Ctrl-[**. The capture listener called `preventDefault()` before CodeMirror's event handlers, and CodeMirror consequently skipped Vim's Escape handling. The editor remained in insert mode.
+
+Fixed by counting/classifying in capture but preventing browser shortcut defaults in bubble, after Vim processes them. The same correction allows Ctrl-r and Ctrl-v through. Two Node regression tests cover the ordering/cleanup contract; a Chromium check confirmed Ctrl-[ now returns the spike to normal mode. The game separately checked Escape/Ctrl-[ from insert, visual, command, and search input.
+
+This provides a plausible explanation for the owner's symptom, but its original triggering sequence was unknown. Owner confirmation is still welcome; Windows Ctrl-w remains pending.

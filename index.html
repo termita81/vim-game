@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" data-theme="green" data-font-size="M">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A silent browser game for learning Vim. Infiltrate Meridian Corporation, one keystroke at a time.">
+  <title>Ghost Protocol</title>
+  <link rel="stylesheet" href="css/themes.css"><link rel="stylesheet" href="css/base.css"><link rel="stylesheet" href="css/components.css">
+  <script type="importmap">{
+  "imports": {
+    "@codemirror/state": "https://esm.sh/@codemirror/state@6.7.6?external=*&target=es2022",
+    "@codemirror/view": "https://esm.sh/@codemirror/view@6.43.13?external=*&target=es2022",
+    "@codemirror/commands": "https://esm.sh/@codemirror/commands@6.11.1?external=*&target=es2022",
+    "@codemirror/language": "https://esm.sh/@codemirror/language@6.12.4?external=*&target=es2022",
+    "@codemirror/search": "https://esm.sh/@codemirror/search@6.7.2?external=*&target=es2022",
+    "@replit/codemirror-vim": "https://esm.sh/@replit/codemirror-vim@6.4.0?external=*&target=es2022",
+    "@replit/codemirror-vim-core": "https://esm.sh/@replit/codemirror-vim-core@0.1.0?external=*&target=es2022",
+    "@lezer/common": "https://esm.sh/@lezer/common@1.5.3?external=*&target=es2022",
+    "@lezer/highlight": "https://esm.sh/@lezer/highlight@1.2.5?external=*&target=es2022",
+    "@lezer/lr": "https://esm.sh/@lezer/lr@1.4.10?external=*&target=es2022",
+    "style-mod": "https://esm.sh/style-mod@4.1.4?external=*&target=es2022",
+    "w3c-keyname": "https://esm.sh/w3c-keyname@2.2.8?external=*&target=es2022",
+    "crelt": "https://esm.sh/crelt@1.0.7?external=*&target=es2022",
+    "@marijn/find-cluster-break": "https://esm.sh/@marijn/find-cluster-break@1.0.4?external=*&target=es2022"
+  }
+}</script>
+</head>
+<body>
+  <div class="larger-screen" role="status"><span class="brand">GHOST<span>_</span>PROTOCOL</span><h1>A little more room to operate.</h1><p>Use a window at least 768 × 600 pixels and a hardware keyboard. For more room to operate, aim for 1280 × 720 or larger.</p></div>
+  <div class="app-shell">
+    <header class="app-header"><a class="brand" href="./" aria-label="Ghost Protocol home">GHOST<span>_</span>PROTOCOL</a><div class="header-actions"><span id="connection" class="connection">SECURE CHANNEL</span><button id="open-settings" class="settings-button" type="button">Settings</button></div></header>
+    <p id="notice" class="notice" role="status" hidden></p>
+    <main id="stage"><p class="loading">Opening the channel…</p></main>
+    <footer class="app-footer"><span>MERIDIAN // INTERNAL USE ONLY</span><span><code>:q!</code> = abort mission <span class="footer-divider">/</span> <code>:e!</code> = restart</span><span class="silent-note">NO SOUND. NO TRACE.</span></footer>
+  </div>
+  <dialog id="settings" class="settings-dialog" aria-labelledby="settings-title">
+    <div class="settings-heading"><h2 id="settings-title">Terminal settings</h2><button type="button" data-close aria-label="Close settings">✕</button></div>
+    <label>Theme<select name="theme"><option value="green">Green / classic terminal</option><option value="amber">Amber / late shift</option><option value="grey">Grey / office issue</option></select></label>
+    <label>Font size<select name="fontSize"><option value="S">Small</option><option value="M">Medium</option><option value="L">Large</option></select></label>
+    <label class="checkbox-label"><input name="keyOverlay" type="checkbox">Show recent keystrokes</label>
+    <label>Escape alternative<select name="escAlias"><option value="none">Standard: Esc or Ctrl-[</option><option value="jk">jk in insert mode (non-standard)</option></select></label>
+    <p class="muted">jk is an optional convenience, not a standard Vim command.</p>
+  </dialog>
+  <noscript>This terminal needs JavaScript to open a channel.</noscript>
+  <script type="module" src="src/main.js"></script>
+</body></html>

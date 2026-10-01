@@ -6,7 +6,7 @@
 | Markup/styles | One `index.html`, a few CSS files | CSS custom properties for themes, CSS Grid/Flexbox for layout |
 | Editor | **CodeMirror 6** (`@codemirror/state`, `view`, `commands`, `language`, `search`) | One `EditorView` per window |
 | Vim emulation | **`@replit/codemirror-vim`** | Provides motions, operators, text objects, registers, marks, macros, `:s`, `:g`, `Vim.handleKey`, `Vim.defineEx` |
-| Delivery | CDN via **esm.sh**, with a pinned **import map** | Phase 0 versions are recorded in `tools/spike.html`; the game import map belongs in `index.html` from Phase 1 |
+| Delivery | CDN via **esm.sh**, with a pinned **import map** | Pinned import maps in `index.html` and the developer spike `tools/spike.html` |
 | Dev server | `python3 -m http.server` (or `npx serve`) | Needed because ES modules don't load from `file://` |
 | Persistence | `localStorage` | Schema in Constitution Appendix D |
 | Audio | None | By design |
@@ -16,7 +16,7 @@
 ## 2. Dependency rules
 
 - **One copy of each `@codemirror/*` package.** Use an import map, and load the vim module with all `@codemirror/*` packages marked external (esm.sh `?external=...`), otherwise CodeMirror throws \"multiple instances of @codemirror/state\". Verify in Phase 0.
-- Pin exact versions. No `@latest`. Phase 0 pins: `@replit/codemirror-vim` 6.4.0 and core 0.1.0; CodeMirror state 6.7.6, view 6.43.13, commands 6.11.1, language 6.12.4, search 6.7.2. The complete Phase 0 transitive map lives in `tools/spike.html`.
+- Pin exact versions. No `@latest`. Phase 0 pins: `@replit/codemirror-vim` 6.4.0 and core 0.1.0; CodeMirror state 6.7.6, view 6.43.13, commands 6.11.1, language 6.12.4, search 6.7.2. The complete pinned transitive map lives in `index.html` and `tools/spike.html`; update both together.
 - Phase 0 uses `?external=*&target=es2022` on **every** mapped package, not only the vim module. All external imports resolve through the same map, including Lezer and `@marijn/find-cluster-break`; this prevents transitive modules from importing another copy of CodeMirror. CDN graph verification is pending owner browser playtest; see `docs/SPIKE-FINDINGS.md`.
 - If the CDN becomes a problem, vendor the files into `vendor/` and adjust the import map. No other code changes should be needed.
 - No other runtime dependencies. Helpers are hand-written.
@@ -83,7 +83,7 @@ Guidelines: each file has one job. Modules communicate through `store` events an
 
 | Topic | Approach |
 |---|---|
-| **Keystroke counting** | One capture-phase `keydown` listener on the editor root. It classifies the event by the current Vim mode (normal/visual/insert/command line) and adds the weight from Constitution 5.1. Macro/`.` replays don't trigger `keydown`, so they naturally cost 0 |
+| **Keystroke counting** | A capture-phase `keydown` listener on the editor root classifies physical input by the current Vim mode (normal/visual/insert/command line) and adds the weight from Constitution 5.1. Browser-default prevention runs at bubble time after Vim: preventing earlier causes CodeMirror to skip the command handler (Phase 1 reproduced the Ctrl-[ bug). Macro/`.` replays don't trigger `keydown`, so they naturally cost 0 |
 | **Rule-made edits** | Dispatched as transactions annotated `userEvent: \"rule\"` with `Transaction.addToHistory.of(false)`, ignored by the counter |
 | **Windows** | A tree of `{type: \"split\", dir, children, sizes}` and `{type: \"leaf\", bufferId}` nodes rendered with flexbox. Sizes in character cells (measured) so `Ctrl-w +` adjusts by one line/column |
 | **Buffers** | `{ id, name, text, modified, ... }` in a manager. A hidden buffer keeps its `EditorState` (including history) in memory. The same buffer in two windows is synced. Phase 0 synchronizes ChangeSets with an annotation preventing loops and excludes mirrored edits from recipient history. Accept per-window history (Constitution 10.4); local edits/undo from either view synchronized in API probes |
@@ -92,14 +92,14 @@ Guidelines: each file has one job. Modules communicate through `store` events an
 | **Relative numbers** | Phase 0: per-view Compartment and custom `lineNumbers` formatter; `Vim.defineOption` supplies `relativenumber` / `rnu`. Refresh on cursor movement; current line shows its absolute number |
 | **Visual block** | Enable `EditorState.allowMultipleSelections.of(true)`; otherwise block insertion only edits one row |
 | **Themes** | `<html data-theme=\"green|amber|grey\">` switches CSS variables. Editor styling uses variables only, with no hard-coded colors |
-| **Responsive** | `clamp()` font sizing, CSS Grid with named areas. `@media (max-width: 1279px)` tabs the side panel. `@media (max-width: 767px)` shows the \"larger screen\" message |
+| **Responsive** | `clamp()` font sizing, CSS Grid with named areas. `@media (max-width: 1279px)` tabs the side panel. `@media (max-width: 767px), (max-height: 599px)` shows the \"larger screen\" message |
 | **Dev mode** | `?dev=1` adds a panel: jump to any level, show cost breakdown, force-complete/fail, run the reference solution, log rule events, reset save |
 
 ## 5. Browser support
 Latest Chrome, Edge, Firefox, and Safari on desktop. iPad Safari/Chrome with a hardware keyboard is best-effort. Fullscreen Keyboard Lock is Chromium-only, so the alias path must work everywhere (Constitution 7.3).
 
 ## 6. Conventions
-2-space indent, single quotes or double quotes consistently (pick one in Phase 1), JSDoc on exported functions, no `var`, no globals except the import map. Every exported function that changes state goes through `store`.
+2-space indent, Use single quotes consistently. JSDoc on exported functions, no `var`, no globals except the import map. Every exported function that changes state goes through `store`.
 
 
 ## 7. Verification

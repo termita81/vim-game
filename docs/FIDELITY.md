@@ -16,3 +16,9 @@ Phase 0 notes. Findings below come from temporary API probes, not a completed Ne
 | Neovim defaults | `Y = y$`, hidden buffers, authentic E37/E162/E20 not patched yet | Implement during corresponding phases; do not teach until faithful. |
 
 No approximation labels are currently shown because this spike has no Toolkit. Any retained gameplay approximation must be tagged there and documented here.
+
+## Phase 1 input correction
+
+The spike's capture listener cancelled Ctrl-[ before CodeMirror could handle it, leaving insert mode active. Browser-default prevention now runs after Vim's input handler. Reproduced and verified corrected in Chromium 153; capture-order regression tests added. In the game, Escape/Ctrl-[, Ctrl-r redo, and Ctrl-v visual block were verified through browser input. The original owner's unknown sequence and other browsers still need confirmation.
+
+The game supplies real save/quit/restart/extraction behavior for its single mission buffer. The spike continues to report interception only. Full multi-window/buffer error semantics remain Phases 6–7.

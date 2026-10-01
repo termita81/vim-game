@@ -1,3 +1,5 @@
+import { keyCost } from '../game/keystrokes.js';
+
 /** Classify physical input before Vim handles it, including its command-line panel. */
 export function inputMode(cm, target) {
   if (target.closest?.('.cm-panel input')) return 'command-line';
@@ -13,16 +15,20 @@ export function captureKeys(root, getEditor, log) {
     const cm = getEditor(event.target);
     if (!cm) return;
     const mode = inputMode(cm, event.target);
-    const modifier = ['Control', 'Shift', 'Alt', 'Meta'].includes(event.key);
-    const printable = event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey;
-    const cost = modifier ? 0 :
-      mode === 'insert' && (printable || ['Enter', 'Backspace'].includes(event.key)) ? 0.5 :
-      mode === 'command-line' && event.key !== 'Enter' && event.key !== 'Escape' ? 0.5 : 1;
+    const cost = keyCost(event, mode);
     log(`${mode.padEnd(13)} ${event.ctrlKey ? 'Ctrl-' : ''}${event.altKey ? 'Alt-' : ''}${event.metaKey ? 'Meta-' : ''}${event.key} → ${cost}`);
-    if (event.ctrlKey && ['o', 'r', 'u', 'd', 'f', '[', 'v', '6', '^'].includes(event.key.toLowerCase())) {
+  };
+  // CodeMirror skips its handlers when defaultPrevented is already true.
+  // Count before Vim, but cancel browser defaults only after Vim has run.
+  const preventShortcuts = (event) => {
+    if (getEditor(event.target) && event.ctrlKey && ['o', 'r', 'u', 'd', 'f', '[', 'v', '6', '^'].includes(event.key.toLowerCase())) {
       event.preventDefault();
     }
   };
   root.addEventListener('keydown', listener, true);
-  return () => root.removeEventListener('keydown', listener, true);
+  root.addEventListener('keydown', preventShortcuts);
+  return () => {
+    root.removeEventListener('keydown', listener, true);
+    root.removeEventListener('keydown', preventShortcuts);
+  };
 }

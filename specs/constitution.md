@@ -225,7 +225,7 @@ If one buffer is shown in two windows, text is synced, but **undo history may be
 ## 11. UI and Experience
 
 - **Themes:** `green` (classic hacker), `amber`, `grey`, all on black, implemented as CSS variables on `<html data-theme>`. Theme switch in settings, persisted.
-- **Responsive:** minimum supported viewport **1280×720 (HD)** with the full layout. Wider screens scale typography (CSS `clamp()`), with a maximum content width on very large screens. **768-1279 px wide** (tablets with keyboards, landscape or portrait) collapses the side panel into tabs under the editor, with the dialogue line always visible. Below 768 px, show a polite \"needs a larger screen\" message. No phone layout.
+- **Responsive:** minimum supported viewport **1280×720 (HD)** with the full layout. Wider screens scale typography (CSS `clamp()`), with a maximum content width on very large screens. **768-1279 px wide** (tablets with keyboards, landscape or portrait) collapses the side panel into tabs under the editor, with the dialogue line always visible. Below 768 px wide or 600 px high, show a polite \"needs a larger screen\" message. The compact layout requires at least **768×600**; **1280×720 or larger** is recommended. No phone layout.
 - **Accessibility:** respects `prefers-reduced-motion` (no scanline animation or typewriter delays), strong contrast in all themes, and a font-size setting (S/M/L).
 - **Visual effects:** subtle scanlines only. No flashing, no sound.
 - **Line numbers:** absolute numbers are on from Level 0.1. Relative numbers are introduced in Level 1.2 (the player types `:set relativenumber`). After that the preference persists (`:set rnu`, `:set nornu`, `:set nu` all work).

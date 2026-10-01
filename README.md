@@ -1,6 +1,6 @@
 # Ghost Protocol
 
-A browser game for learning Vim through play. The current implementation is the Phase 0 editor spike.
+A silent browser game for learning Vim through play. Phase 1 includes the mission hub and the playable **0.1 — Day One** briefing.
 
 Run from this directory:
 
@@ -8,19 +8,21 @@ Run from this directory:
 python3 -m http.server 8000
 ```
 
-Open [the spike](http://localhost:8000/tools/spike.html) or [Key Lab](http://localhost:8000/tools/keylab.html). The editor loads pinned ES modules from esm.sh and needs internet access; there is no build step. Use a desktop browser and keyboard.
+Open [the game](http://localhost:8000/). Use a desktop browser or tablet with a hardware keyboard and a viewport at least 768×600; 1280×720 or larger is recommended. The editor loads pinned ES modules from esm.sh; internet access is required. There is no build step or npm installation needed to play.
 
-The spike includes Vim editing, programmatic replay, a preloaded register, relative numbers, buffer-swap and synchronized-view experiments, custom ex commands, and a mode/input log. Quit/edit/write commands report interception only; there is no playable level yet.
+Start Day One, read or skip the handler's briefing, and use `hjkl` to put your cursor on the ◆. Type `:wq` and Enter to extract. `:q!` aborts to the hub; `:e!` restarts. Escape or Ctrl-[ returns to normal mode. Keep the map intact; this first briefing is unscored and cannot terminate you.
 
-See [spike findings](docs/SPIKE-FINDINGS.md) for decisions and pending manual checks, [fidelity notes](docs/FIDELITY.md), and [the roadmap](specs/roadmap.md). Verification combines targeted automated tests with the roadmap's manual playtests. See [quality checks](docs/QUALITY.md).
+Settings offer green, amber, and grey themes; S/M/L editor fonts; a keystroke overlay; and an optional, non-standard `jk` Escape alias. Settings and completed-run records persist in localStorage. Corrupt or unsupported saves require confirmation before resetting; declining keeps the original save and plays without persistence.
 
+Developer tools remain separate: [editor spike](http://localhost:8000/tools/spike.html) and [Key Lab](http://localhost:8000/tools/keylab.html).
 
 For development checks, use Node 22.13+ on the 22.x line or Node 24+:
 
 ```sh
 npm ci
-npm run lint
-npm test
+npm run check
 ```
 
-`npm run check` runs both commands. ESLint is development-only; serving the game still needs no npm install or build step. There are currently no committed automated tests; they will be added with game logic from Phase 1 onward.
+This runs ESLint and targeted Node tests. Tests cover core flow, objectives, cost, persistence, and shortcut handling order. No bundler or transpiler is used.
+
+See [Phase 1 verification and owner playtest](docs/PHASE-1.md), [quality policy](docs/QUALITY.md), [spike findings](docs/SPIKE-FINDINGS.md), [fidelity notes](docs/FIDELITY.md), and [the roadmap](specs/roadmap.md).
