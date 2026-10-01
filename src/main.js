@@ -92,11 +92,6 @@ function mountMission(run) {
   mountedSession = run.session;
   const mission = element('section', 'mission');
   mission.setAttribute('aria-label', `${run.level.title} mission`);
-  const heading = element('div', 'mission-heading');
-  heading.append(
-    element('p', 'eyebrow', `ACT ${run.level.act} / ONBOARDING`),
-    element('h1', '', `${run.level.id} / ${run.level.title}`),
-  );
   const grid = element('div', 'mission-grid');
   const hud = mountHud(grid);
   const workspace = element('section', 'editor-shell');
@@ -116,7 +111,7 @@ function mountMission(run) {
     skip: () => runner.advanceIntro(true),
   });
   const overlay = keyOverlay(workspace);
-  mission.append(heading, grid);
+  mission.append(grid);
   stage.replaceChildren(mission);
   missionUI = { hud, objectives, dialogue, overlay, status };
   const initialSettings = {
@@ -177,6 +172,13 @@ function render(state) {
   document.getElementById('connection').textContent = state.loading
     ? 'CONNECTING…'
     : 'SECURE CHANNEL';
+  const missionHeading = document.getElementById('mission-heading');
+  missionHeading.hidden = state.screen !== 'mission';
+  if (state.screen === 'mission') {
+    document.getElementById('mission-act').textContent = `ACT ${state.run.level.act} / ONBOARDING`;
+    document.getElementById('mission-title').textContent =
+      `${state.run.level.id} / ${state.run.level.title}`;
+  }
   if (state.screen === 'hub') {
     if (screen !== 'hub') cleanupMission();
     renderHub(stage, core, state.save, start);
