@@ -1,47 +1,22 @@
-import { element, button } from './dom.js';
+import { cloneTemplate } from './dom.js';
 
 /** Render the completed run without awarding career points for a Briefing. */
 export function renderResult(parent, result, actions) {
-  const section = element('section', 'result-screen');
-  section.setAttribute('aria-labelledby', 'result-title');
-  section.append(element('p', 'eyebrow', `EXTRACTION CONFIRMED / MISSION ${result.levelId}`));
-  const title = element('h1', '', 'You’re in.');
-  title.id = 'result-title';
-  section.append(title, element('p', 'muted', `${result.title} · Reception access confirmed.`));
-  const stats = element('div', 'result-stats');
-  for (const [label, value] of [
-    ['KEY COST', result.cost],
-    ['REFERENCE PAR', result.par],
-    ['RUN RANK', result.rank],
-  ]) {
-    const cell = element('div');
-    cell.append(element('span', 'label', label), element('strong', '', String(value)));
-    stats.append(cell);
+  const section = cloneTemplate('result-template');
+  const values = {
+    mission: `EXTRACTION CONFIRMED / MISSION ${result.levelId}`,
+    summary: `${result.title} · Reception access confirmed.`,
+    cost: result.cost,
+    par: result.par,
+    rank: result.rank,
+    solution: result.solution,
+  };
+  for (const [field, value] of Object.entries(values)) {
+    section.querySelector(`[data-field="${field}"]`).textContent = String(value);
   }
-  section.append(
-    stats,
-    element(
-      'p',
-      'result-note',
-      'This was an unscored briefing. Your career rank stays Intern; practice as often as you like.',
-    ),
-  );
-  const solution = element('details', 'solution');
-  solution.append(
-    element('summary', '', 'See the reference route'),
-    element('code', '', result.solution),
-    element(
-      'p',
-      'muted',
-      'From the starting position: three steps down, ten right, then save and quit.',
-    ),
-  );
-  const controls = element('div', 'result-actions');
-  controls.append(
-    button('Back to assignments →', actions.hub, 'primary-button'),
-    button('Replay briefing', actions.replay, 'text-button'),
-  );
-  section.append(solution, controls);
+  const hub = section.querySelector('[data-action="hub"]');
+  hub.addEventListener('click', actions.hub);
+  section.querySelector('[data-action="replay"]').addEventListener('click', actions.replay);
   parent.replaceChildren(section);
-  controls.firstChild.focus({ preventScroll: true });
+  hub.focus({ preventScroll: true });
 }

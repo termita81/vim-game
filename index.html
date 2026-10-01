@@ -94,6 +94,175 @@
       >
       <p class="muted">jk is an optional convenience, not a standard Vim command.</p>
     </dialog>
+
+    <template id="hub-template">
+      <section class="hub" aria-labelledby="hub-title">
+        <div class="hub-welcome">
+          <p class="eyebrow">FREELANCE OPERATIONS / MERIDIAN CORPORATION</p>
+          <h1 id="hub-title">Every keystroke<br />leaves a trace.</h1>
+          <p class="hub-summary">
+            Your cover is an employee badge. Your only tool is Vim. Try to look like you belong
+            here.
+          </p>
+          <div class="career">
+            <span class="label">CAREER RANK</span><strong>Intern</strong
+            ><span class="muted">Probationary. Naturally.</span>
+          </div>
+        </div>
+        <section class="assignments" data-field="assignments">
+          <h2 class="section-heading">Available assignments</h2>
+          <span class="assignment-count">01</span>
+        </section>
+        <aside class="hub-handler">
+          <span class="handler-label">:wq / YOUR HANDLER</span>
+          <p>
+            “Your predecessor used forty keystrokes to find reception. He now works somewhere with
+            fewer doors.”
+          </p>
+        </aside>
+      </section>
+    </template>
+    <template id="mission-card-template">
+      <article class="mission-card">
+        <span class="mission-number" data-field="number"></span>
+        <div class="mission-card-body">
+          <p class="eyebrow">ACT 0 / ONBOARDING</p>
+          <h3 data-field="title"></h3>
+          <p class="muted">Find reception. Learn to move without leaving fingerprints.</p>
+          <p class="mission-meta">BRIEFING · UNSCORED · NO TERMINATION</p>
+          <p class="completion" data-field="completion"></p>
+        </div>
+        <button type="button" class="primary-button" data-action="launch"></button>
+      </article>
+    </template>
+    <template id="mission-template">
+      <section class="mission">
+        <div class="mission-grid">
+          <section class="editor-shell">
+            <div class="editor-chrome">
+              <span data-field="filename"></span><span class="file-status">VIM / CONNECTED</span>
+            </div>
+            <div class="editor-mount"></div>
+            <div class="editor-status"></div>
+          </section>
+        </div>
+      </section>
+    </template>
+    <template id="hud-template">
+      <div class="hud">
+        <div class="hud-cell">
+          <span class="label">KEY COST</span><strong data-field="cost"></strong>
+        </div>
+        <div class="hud-cell">
+          <span class="label">RUN RANK</span><strong data-field="rank"></strong>
+        </div>
+        <div class="hud-cell">
+          <span class="label">VIM MODE</span><strong data-field="mode"></strong>
+        </div>
+        <span class="briefing-badge">UNSCORED BRIEFING</span>
+      </div>
+    </template>
+    <template id="dialogue-template">
+      <section class="dialogue-panel" aria-label="Handler dialogue">
+        <span class="handler-label">:wq / HANDLER</span>
+        <p role="status" data-field="message"></p>
+        <div class="dialogue-actions">
+          <span class="muted" data-field="position"></span
+          ><button type="button" class="text-button" data-action="skip">Skip briefing</button
+          ><button type="button" class="primary-button" data-action="next">Continue →</button>
+        </div>
+      </section>
+    </template>
+    <template id="objectives-template">
+      <aside class="side-panel">
+        <div class="side-tabs" role="tablist" aria-label="Mission reference">
+          <button
+            type="button"
+            class="side-tab"
+            id="side-tab-0"
+            role="tab"
+            aria-controls="objectives-tabpanel"
+          >
+            Objectives
+          </button>
+          <button
+            type="button"
+            class="side-tab"
+            id="side-tab-1"
+            role="tab"
+            aria-controls="controls-tabpanel"
+          >
+            Controls
+          </button>
+        </div>
+        <section
+          class="objectives-section"
+          id="objectives-tabpanel"
+          role="tabpanel"
+          aria-labelledby="side-tab-0"
+        >
+          <h2 class="section-heading">Mission objectives</h2>
+          <p class="extraction-note">Reach the terminal, then :wq ↵ to extract.</p>
+          <p class="muted objective-help">
+            Keep the map intact. If you accidentally edit it, :e! restores a fresh copy.
+          </p>
+        </section>
+        <section
+          class="controls-section"
+          id="controls-tabpanel"
+          role="tabpanel"
+          aria-labelledby="side-tab-1"
+        >
+          <h2 class="section-heading">Field reference</h2>
+          <div class="motion-grid"></div>
+          <dl class="controls-list"></dl>
+        </section>
+      </aside>
+    </template>
+    <template id="objective-template"
+      ><div class="objective">
+        <span class="objective-mark" aria-hidden="true">○</span>
+        <p data-field="text"></p></div
+    ></template>
+    <template id="motion-template"
+      ><div><kbd data-field="keys"></kbd><span data-field="description"></span></div
+    ></template>
+    <template id="reference-template"
+      ><dt data-field="keys"></dt>
+      <dd data-field="description"></dd
+    ></template>
+    <template id="key-overlay-template"
+      ><div class="key-overlay" aria-hidden="true"></div
+    ></template>
+    <template id="keycap-template"><kbd class="keycap"></kbd></template>
+    <template id="result-template">
+      <section class="result-screen" aria-labelledby="result-title">
+        <p class="eyebrow" data-field="mission"></p>
+        <h1 id="result-title">You’re in.</h1>
+        <p class="muted" data-field="summary"></p>
+        <div class="result-stats">
+          <div><span class="label">KEY COST</span><strong data-field="cost"></strong></div>
+          <div><span class="label">REFERENCE PAR</span><strong data-field="par"></strong></div>
+          <div><span class="label">RUN RANK</span><strong data-field="rank"></strong></div>
+        </div>
+        <p class="result-note">
+          This was an unscored briefing. Your career rank stays Intern; practice as often as you
+          like.
+        </p>
+        <details class="solution">
+          <summary>See the reference route</summary>
+          <code data-field="solution"></code>
+          <p class="muted">
+            From the starting position: three steps down, ten right, then save and quit.
+          </p>
+        </details>
+        <div class="result-actions">
+          <button type="button" class="primary-button" data-action="hub">
+            Back to assignments →</button
+          ><button type="button" class="text-button" data-action="replay">Replay briefing</button>
+        </div>
+      </section>
+    </template>
     <noscript>This terminal needs JavaScript to open a channel.</noscript>
     <script type="module" src="src/main.js"></script>
   </body>

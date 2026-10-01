@@ -51,6 +51,12 @@ Prettier 3.9.9 is pinned as a development dependency and runs separately from ES
 
 Vendored dependencies, generated output, and coverage are excluded. Tool source is checked so the diagnostic pages remain maintainable. Do not suppress genuine errors merely to get a clean run.
 
+## Template refactor verification — 2026-10-01
+
+The player UI now clones native HTML templates. Formatting, ESLint, and all 22 existing Node tests pass. A temporary DOM harness outside the repository checked template cloning (including multi-element fragments), missing-template errors, launch/result actions, HUD bindings, safe text rendering, objective completion, reference tab selection, dialogue visibility, and keycap expiry/cleanup. No test dependency was added to the project. These DOM checks do not establish browser rendering, keyboard focus, or CodeMirror integration.
+
+Pending browser checks: hub → briefing → play → extraction → result → replay; abort and restart; settings persistence; header visibility; keyboard reference-tab navigation and focus restoration; desktop/compact layouts in all three themes; and repeated navigation with no extra editors or keycaps. No browser executable or browser connector was available during this refactor.
+
 ## Sources
 
 - [ESLint setup and recommended rules](https://eslint.org/docs/latest/use/getting-started)

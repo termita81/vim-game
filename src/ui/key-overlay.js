@@ -1,9 +1,8 @@
-import { element } from './dom.js';
+import { cloneTemplate } from './dom.js';
 
 /** Show recent physical keys; remove them after two seconds and clean up timers. */
 export function keyOverlay(parent) {
-  const host = element('div', 'key-overlay');
-  host.setAttribute('aria-hidden', 'true');
+  const host = cloneTemplate('key-overlay-template').firstElementChild;
   parent.append(host);
   const timers = new Map();
   function clear() {
@@ -13,7 +12,8 @@ export function keyOverlay(parent) {
   }
   return {
     push(label) {
-      const cap = element('kbd', 'keycap', label);
+      const cap = cloneTemplate('keycap-template').firstElementChild;
+      cap.textContent = label;
       host.append(cap);
       timers.set(
         cap,

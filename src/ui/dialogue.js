@@ -1,18 +1,15 @@
-import { element, button } from './dom.js';
+import { cloneTemplate } from './dom.js';
 
 /** Mount the handler panel with explicit intro/outro progression. */
 export function mountDialogue(parent, actions) {
-  const panel = element('section', 'dialogue-panel');
-  panel.setAttribute('aria-label', 'Handler dialogue');
-  const identity = element('span', 'handler-label', ':wq / HANDLER');
-  const message = element('p');
-  message.setAttribute('role', 'status');
-  const controls = element('div', 'dialogue-actions');
-  const next = button('Continue →', actions.next, 'primary-button');
-  const skip = button('Skip briefing', actions.skip, 'text-button');
-  const position = element('span', 'muted');
-  controls.append(position, skip, next);
-  panel.append(identity, message, controls);
+  const panel = cloneTemplate('dialogue-template');
+  const message = panel.querySelector('[data-field="message"]');
+  const controls = panel.querySelector('.dialogue-actions');
+  const next = panel.querySelector('[data-action="next"]');
+  const skip = panel.querySelector('[data-action="skip"]');
+  const position = panel.querySelector('[data-field="position"]');
+  next.addEventListener('click', actions.next);
+  skip.addEventListener('click', actions.skip);
   parent.append(panel);
   return {
     update(run) {

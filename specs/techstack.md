@@ -13,6 +13,12 @@
 | Tests         | Node built-in `node:test` + `node:assert/strict` for pure logic                  | Targeted behavior/regression tests; small browser suite when needed. Owner playtests and labs remain required    |
 | Lint          | ESLint, flat config, recommended correctness rules                               | ES2022 modules, browser/Node globals by directory; development dependency only                                   |
 
+### UI markup and lifecycle
+
+Static player UI structure lives in native `<template>` elements in `index.html`, including screens and repeated components. `cloneTemplate(id)` returns a cloned `DocumentFragment` and reports missing templates clearly. UI modules query scoped `data-field` / `data-action` bindings, populate values with `textContent`, and attach listeners; no HTML interpolation or runtime framework is used.
+
+Mount/unmount screens in the stage container. Cache references to mission fields and update them in place so the editor survives state updates. Dispose the editor and key-overlay timers when leaving or restarting a mission. Use `hidden` for temporary controls; the header and settings dialog remain persistent HTML. Repeated template components use scoped selectors, while screen headings and the single mounted mission's reference tabs retain accessible IDs and relationships. Developer diagnostic pages remain separate.
+
 ## 2. Dependency rules
 
 - **One copy of each `@codemirror/*` package.** Use an import map, and load the vim module with all `@codemirror/*` packages marked external (esm.sh `?external=...`), otherwise CodeMirror throws \"multiple instances of @codemirror/state\". Verify in Phase 0.

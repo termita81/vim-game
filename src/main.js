@@ -3,7 +3,7 @@ import { readSave, writeSave } from './save.js';
 import { createLevelRunner } from './game/level-runner.js';
 import { loadLevel } from './game/level-loader.js';
 import core from './content/packs/core/index.js';
-import { element } from './ui/dom.js';
+import { cloneTemplate } from './ui/dom.js';
 import { renderHub } from './ui/hub.js';
 import { mountHud } from './ui/hud.js';
 import { mountDialogue } from './ui/dialogue.js';
@@ -90,20 +90,15 @@ async function start(id) {
 function mountMission(run) {
   cleanupMission();
   mountedSession = run.session;
-  const mission = element('section', 'mission');
+  const mission = cloneTemplate('mission-template').firstElementChild;
   mission.setAttribute('aria-label', `${run.level.title} mission`);
-  const grid = element('div', 'mission-grid');
+  const grid = mission.querySelector('.mission-grid');
   const hud = mountHud(grid);
-  const workspace = element('section', 'editor-shell');
-  const chrome = element('div', 'editor-chrome');
-  chrome.append(
-    element('span', '', run.buffers[0].name),
-    element('span', 'file-status', 'VIM / CONNECTED'),
-  );
-  const mount = element('div', 'editor-mount');
-  const status = element('div', 'editor-status');
-  workspace.append(chrome, mount, status);
-  grid.append(workspace);
+  grid.prepend(grid.querySelector('.hud'));
+  const workspace = mission.querySelector('.editor-shell');
+  mission.querySelector('[data-field="filename"]').textContent = run.buffers[0].name;
+  const mount = mission.querySelector('.editor-mount');
+  const status = mission.querySelector('.editor-status');
   const objectives = mountObjectives(grid, run.level);
   const dialogue = mountDialogue(grid, {
     next: () =>
@@ -111,7 +106,6 @@ function mountMission(run) {
     skip: () => runner.advanceIntro(true),
   });
   const overlay = keyOverlay(workspace);
-  mission.append(grid);
   stage.replaceChildren(mission);
   missionUI = { hud, objectives, dialogue, overlay, status };
   const initialSettings = {

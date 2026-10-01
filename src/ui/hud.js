@@ -1,21 +1,12 @@
 import { RANKS, runRank } from '../game/scoring.js';
-import { element } from './dom.js';
+import { cloneTemplate } from './dom.js';
 
 /** Mount the mission HUD once; update text without replacing the editor. */
 export function mountHud(parent) {
-  const hud = element('div', 'hud');
-  const fields = {};
-  for (const [id, label] of [
-    ['cost', 'KEY COST'],
-    ['rank', 'RUN RANK'],
-    ['mode', 'VIM MODE'],
-  ]) {
-    const cell = element('div', 'hud-cell');
-    fields[id] = element('strong');
-    cell.append(element('span', 'label', label), fields[id]);
-    hud.append(cell);
-  }
-  hud.append(element('span', 'briefing-badge', 'UNSCORED BRIEFING'));
+  const hud = cloneTemplate('hud-template');
+  const fields = Object.fromEntries(
+    ['cost', 'rank', 'mode'].map((id) => [id, hud.querySelector(`[data-field="${id}"]`)]),
+  );
   parent.append(hud);
   return (run) => {
     fields.cost.textContent = String(run.cost);
