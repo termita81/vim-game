@@ -2,8 +2,9 @@ import { cloneTemplate } from './dom.js';
 import { RANKS } from '../game/scoring.js';
 
 /** Render the hub for the currently available pack; Briefings don't promote career rank. */
-export function renderHub(parent, pack, save, start) {
+export function renderHub(parent, pack, save, start, reset) {
   const hub = cloneTemplate('hub-template');
+  hub.querySelector('[data-action="reset-journey"]').addEventListener('click', reset);
   const assignments = hub.querySelector('[data-field="assignments"]');
   for (const level of pack.levels) {
     const progress = save.progress[level.id];

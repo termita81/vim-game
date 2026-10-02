@@ -666,3 +666,9 @@
     padding-block: 12px !important;
   }
 }
+
+.reset-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}

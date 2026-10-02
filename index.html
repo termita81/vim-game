@@ -92,6 +92,24 @@
       <p class="muted">jk is an optional convenience, not a standard Vim command.</p>
     </dialog>
 
+    <dialog
+      id="reset-journey"
+      class="settings-dialog"
+      aria-labelledby="reset-title"
+      aria-describedby="reset-description"
+    >
+      <form method="dialog">
+        <div class="settings-heading"><h2 id="reset-title">Reset journey?</h2></div>
+        <p id="reset-description">
+          This permanently clears saved mission progress, best scores, attempts, unlocked commands,
+          and seen briefings. Your display and keyboard settings stay the same.
+        </p>
+        <div class="reset-actions">
+          <button type="submit" value="cancel" autofocus>Cancel</button>
+          <button type="submit" value="reset" class="primary-button">Reset journey</button>
+        </div>
+      </form>
+    </dialog>
     <template id="hub-template">
       <section class="hub" aria-labelledby="hub-title">
         <div class="hub-welcome">
@@ -116,6 +134,9 @@
             “Your predecessor used forty keystrokes to find reception. He now works somewhere with
             fewer doors.”
           </p>
+          <button type="button" class="text-button" data-action="reset-journey">
+            Reset journey
+          </button>
         </aside>
       </section>
     </template>

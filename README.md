@@ -14,6 +14,8 @@ Start Day One, read or skip the handler's briefing, and use `hjkl` to put your c
 
 Settings offer green, amber, and grey themes; S/M/L editor fonts; a keystroke overlay; and an optional, non-standard `jk` Escape alias. Settings and completed-run records persist in localStorage. Corrupt or unsupported saves require confirmation before resetting; declining keeps the original save and plays without persistence.
 
+To start over, use **Reset journey** on the home screen and confirm. This clears progress and journey history while keeping display and keyboard settings. If storage is unavailable, the reset applies only to the current session.
+
 Developer tools remain separate: [editor spike](http://localhost:8000/tools/spike.html) and [Key Lab](http://localhost:8000/tools/keylab.html).
 
 For development checks, use Node 22.13+ on the 22.x line or Node 24+:

@@ -1,5 +1,5 @@
 import { createStore } from './store.js';
-import { readSave, writeSave } from './save.js';
+import { readSave, writeSave, resetJourney } from './save.js';
 import { createLevelRunner } from './game/level-runner.js';
 import { loadLevel } from './game/level-loader.js';
 import core from './content/packs/core/index.js';
@@ -55,6 +55,34 @@ let phase;
 let previousSave = saved.data;
 let previousSettings;
 let loadRequest = 0;
+
+const resetDialog = document.getElementById('reset-journey');
+
+function openJourneyReset() {
+  const state = store.getState();
+  if (state.screen !== 'hub' || state.loading) return;
+  resetDialog.returnValue = 'cancel';
+  resetDialog.showModal();
+}
+
+resetDialog.addEventListener('close', () => {
+  const state = store.getState();
+  if (resetDialog.returnValue === 'reset' && state.screen === 'hub' && !state.loading) {
+    const { data, persisted } = resetJourney(storage, state.save);
+    persist = persisted;
+    previousSave = data;
+    store.update((current) => ({
+      ...current,
+      save: data,
+      run: null,
+      result: null,
+      notice: persisted
+        ? 'Journey reset. Your display and keyboard settings were kept.'
+        : 'Journey reset for this session only. Saving failed; old progress may return after reloading.',
+    }));
+  }
+  stage.querySelector('[data-action="reset-journey"]')?.focus({ preventScroll: true });
+});
 
 function cleanupMission() {
   editor?.destroy();
@@ -181,7 +209,8 @@ function render(state) {
   }
   if (state.screen === 'hub') {
     if (screen !== 'hub') cleanupMission();
-    renderHub(stage, core, state.save, start);
+    renderHub(stage, core, state.save, start, openJourneyReset);
+    stage.querySelector('[data-action="reset-journey"]').disabled = state.loading;
     stage.querySelector('.primary-button').disabled = state.loading;
   } else if (state.screen === 'mission') {
     if (mountedSession !== state.run.session) mountMission(state.run);

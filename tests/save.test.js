@@ -1,6 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { defaultSave, readSave, writeSave, SAVE_KEY, migrations } from '../src/save.js';
+import {
+  defaultSave,
+  readSave,
+  writeSave,
+  SAVE_KEY,
+  migrations,
+  resetJourney,
+} from '../src/save.js';
 function storage(initial = null) {
   let value = initial;
   return {
@@ -78,4 +85,39 @@ test('save defaults are independent and invalid writes do not overwrite storage'
   const target = storage('retained');
   assert.equal(writeSave(target, {}), false);
   assert.equal(target.value(), 'retained');
+});
+
+test('journey reset clears all history, keeps preferences, and persists across reload', () => {
+  const original = defaultSave();
+  original.settings.theme = 'amber';
+  original.settings.escAlias = 'jk';
+  original.progress['0.1'] = { completed: true, attempts: 3, bestRank: 0, bestPoints: 16 };
+  original.toolkit.hjkl = { uses: 5 };
+  original.insultHistory = ['old'];
+  original.seen['0.1.intro'] = true;
+  const target = storage(JSON.stringify(original));
+  const result = resetJourney(target, original);
+  assert.equal(result.persisted, true);
+  assert.deepEqual(result.data, { ...defaultSave(), settings: original.settings });
+  assert.deepEqual(readSave(target).data, result.data);
+  assert.equal(original.progress['0.1'].completed, true);
+  result.data.settings.theme = 'grey';
+  assert.equal(original.settings.theme, 'amber');
+});
+
+test('failed journey reset persistence preserves old storage and returns fresh session data', () => {
+  const original = defaultSave();
+  original.seen['0.1.intro'] = true;
+  const raw = JSON.stringify(original);
+  const target = {
+    getItem: () => raw,
+    setItem() {
+      throw new Error('quota');
+    },
+  };
+  const result = resetJourney(target, original);
+  assert.equal(result.persisted, false);
+  assert.deepEqual(result.data.seen, {});
+  assert.equal(target.getItem(SAVE_KEY), raw);
+  assert.equal(resetJourney(undefined, original).persisted, false);
 });

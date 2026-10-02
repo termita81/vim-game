@@ -27,6 +27,12 @@ export function defaultSave() {
     seen: {},
   };
 }
+/** Clear journey history while retaining an independent copy of player preferences. */
+export function resetJourney(storage, currentSave) {
+  const data = { ...defaultSave(), settings: { ...currentSave.settings } };
+  return { data, persisted: writeSave(storage, data) };
+}
+
 const record = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
 const nonnegative = (value) => Number.isFinite(value) && value >= 0;
 
