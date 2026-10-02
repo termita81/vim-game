@@ -58,7 +58,15 @@
       <main id="stage"><p class="loading">Opening the channel…</p></main>
       <footer class="status-bar" aria-label="Game status">
         <span id="game-status">ASSIGNMENTS</span>
-        <span id="mission-shortcuts" hidden><code>:q!</code> abort · <code>:e!</code> restart</span>
+        <span id="mission-shortcuts" hidden>
+          <a href="#" data-command="quit" aria-label="Abort mission (:q!)"
+            ><code>:q!</code> abort</a
+          >
+          ·
+          <a href="#" data-command="edit" aria-label="Restart mission (:e!)"
+            ><code>:e!</code> restart</a
+          >
+        </span>
       </footer>
     </div>
     <dialog id="settings" class="settings-dialog" aria-labelledby="settings-title">
@@ -114,14 +122,18 @@
       <section class="hub" aria-labelledby="hub-title">
         <div class="hub-welcome">
           <p class="eyebrow">FREELANCE OPERATIONS / MERIDIAN CORPORATION</p>
-          <h1 id="hub-title">Every keystroke<br />leaves a trace.</h1>
+          <h1 id="hub-title">Get promoted.<br />Stay unnoticed.</h1>
           <p class="hub-summary">
-            Your cover is an employee badge. Your only tool is Vim. Try to look like you belong
-            here.
+            You’re a freelance intruder posing as Meridian Corporation’s newest intern. Your job:
+            work your way into its servers and steal the Ghost Protocol file before the next audit
+            makes the evidence disappear.
           </p>
           <div class="career">
             <span class="label">CAREER RANK</span><strong>Intern</strong
             ><span class="muted">Probationary. Naturally.</span>
+            <button type="button" class="reset-journey-button" data-action="reset-journey">
+              Reset journey
+            </button>
           </div>
         </div>
         <section class="assignments" data-field="assignments">
@@ -129,14 +141,23 @@
           <span class="assignment-count">01</span>
         </section>
         <aside class="hub-handler">
-          <span class="handler-label">:wq / YOUR HANDLER</span>
+          <span class="handler-label">OPERATION GHOST PROTOCOL / :wq</span>
+          <h2>Infiltrate. Get promoted. Get the file.</h2>
           <p>
-            “Your predecessor used forty keystrokes to find reception. He now works somewhere with
-            fewer doors.”
+            “I’m :wq, your handler. Meridian keeps its secrets behind layers of corporate access. Do
+            the work, earn their trust, and climb through the ranks until you can reach the files
+            they don’t put in the employee handbook.”
           </p>
-          <button type="button" class="text-button" data-action="reset-journey">
-            Reset journey
-          </button>
+          <p>
+            “One complication: every terminal runs Vim. The board banned mice after Finance
+            classified them as unapproved livestock. To pass for an employee, you’ll need to acquire
+            and sharpen real Vim skills—movement, editing, search, and eventually macros. Faster
+            work buys you a better cover. Needless keystrokes attract attention.”
+          </p>
+          <p class="story-reassurance">
+            A little Vim or Neovim knowledge is enough to start. Each mission teaches a small skill
+            and moves your cover story forward. Click <strong>Start briefing →</strong> to begin.
+          </p>
         </aside>
       </section>
     </template>
@@ -146,7 +167,9 @@
         <div class="mission-card-body">
           <p class="eyebrow">ACT 0 / ONBOARDING</p>
           <h3 data-field="title"></h3>
-          <p class="muted">Find reception. Learn to move without leaving fingerprints.</p>
+          <p class="muted">
+            Establish your cover at reception. Learn h / j / k / l to move, then :wq to extract.
+          </p>
           <p class="mission-meta">BRIEFING · UNSCORED · NO TERMINATION</p>
           <p class="completion" data-field="completion"></p>
         </div>

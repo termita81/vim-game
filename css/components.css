@@ -124,10 +124,26 @@
 }
 .hub-handler {
   grid-column: 1 / -1;
-  border-top: 1px solid var(--soft-border);
-  padding-top: 24px;
-  margin-top: 24px;
-  max-width: 900px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  background: var(--panel);
+  padding: 20px 24px;
+}
+.hub-handler h2 {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.hub-handler .story-reassurance {
+  margin-bottom: 0;
+  color: var(--fg);
+}
+.reset-journey-button {
+  margin-left: auto;
+  color: var(--fg);
+  border-color: var(--dim);
+  font-size: 12px;
+  white-space: nowrap;
 }
 .handler-label {
   color: var(--accent);
@@ -135,7 +151,8 @@
   margin-bottom: 12px;
 }
 .hub-handler p {
-  color: var(--dim);
+  max-width: 1050px;
+  color: var(--fg);
   font-size: 14px;
 }
 .mission-heading {

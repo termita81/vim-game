@@ -197,6 +197,11 @@ function render(state) {
   const missionHeading = document.getElementById('mission-heading');
   missionHeading.hidden = state.screen !== 'mission';
   document.getElementById('mission-shortcuts').hidden = state.screen !== 'mission';
+  for (const link of document.querySelectorAll('#mission-shortcuts [data-command]')) {
+    const enabled = state.screen === 'mission' && state.run?.phase === 'playing';
+    link.setAttribute('aria-disabled', String(!enabled));
+    link.tabIndex = enabled ? 0 : -1;
+  }
   if (state.screen === 'mission') {
     document.getElementById('mission-act').textContent = `ACT ${state.run.level.act} / ONBOARDING`;
     document.getElementById('mission-title').textContent =
@@ -235,6 +240,14 @@ function render(state) {
   screen = state.screen;
 }
 store.subscribe(render);
+for (const link of document.querySelectorAll('#mission-shortcuts [data-command]')) {
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (store.getState().run?.phase !== 'playing') return;
+    runner.command(link.dataset.command, true);
+    if (store.getState().run?.phase === 'playing') editor?.focus();
+  });
+}
 const openSettings = mountSettings(document.getElementById('settings'), store, () => {
   if (store.getState().run?.phase === 'playing') editor?.focus();
 });

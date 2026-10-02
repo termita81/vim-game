@@ -31,7 +31,7 @@ export default {
   rules: [],
   dialogue: {
     intro: [
-      'I’m :wq, your handler. Use h / j / k / l to move left / down / up / right until your cursor reaches the ◆.',
+      'Your intern badge gets you as far as reception. Reach the ◆ terminal to establish your cover. Use h / j / k / l to move left / down / up / right.',
       'Vim starts in normal mode; Esc or Ctrl-[ returns you there after typing. When you reach the ◆, type :wq and press Enter to save and quit — that’s extraction.',
       'Type :q! and Enter to abort, or :e! and Enter for a fresh start. We count keystrokes like golf: fewer is better, and this briefing carries no career score.',
     ],

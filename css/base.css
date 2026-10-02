@@ -183,6 +183,13 @@ kbd {
   color: var(--dim);
   font-size: 11px;
 }
+.status-bar a {
+  text-underline-offset: 3px;
+}
+.status-bar a[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: default;
+}
 .status-bar code {
   color: var(--accent);
 }
